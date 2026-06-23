@@ -1,0 +1,53 @@
+---
+title: "Pricing & Billing"
+description: "Metering rules, unit weights, and billing examples for the Imploy API."
+---
+
+Imploy uses a pay-per-call billing model with a monthly base fee and usage-based overages.
+
+<Note>
+- Base plan: `$1,900 AUD / month`
+- Included units: `400,000`
+- Overage: `$7.50` per `1,000` units
+- Per-unit overage: `$0.0075`
+</Note>
+
+### Unit weights
+
+| Category | Units | Cost/call | Trigger |
+| --- | --- | --- | --- |
+| Read | 2 | $0.015 | Any `GET` request |
+| Write | 8 | $0.060 | Any `POST/PUT/DELETE/PATCH` |
+| Bulk flat | 25 | $0.1875 | Bulk endpoint, no item count |
+| Bulk per-item | max(25, N) | $0.1875+ | Bulk endpoint, N = items |
+| Heavy flat | 35 | $0.2625 | Reports, exports, aggregations |
+| Heavy-bulk per-item | max(35, N) | $0.2625+ | Heavy + item count |
+| Premium | 60 | $0.4500 | AI, external sync, checkout, SMS |
+| Error | 0 | $0.00 | Any `4xx/5xx` response |
+
+### Billing examples per call
+
+| Request | Description | Units | Cost |
+| --- | --- | --- | --- |
+| GET `/client-records` | List clients | 2 | $0.015 |
+| POST `/client-record/step1` | Create client | 8 | $0.060 |
+| POST `/scheduler/publish` | Publish 5 shifts | 25 | $0.1875 |
+| POST `/scheduler/publish` | Publish 50 shifts | 50 | $0.375 |
+| POST `/scheduler/publish` | Publish 200 shifts | 200 | $1.500 |
+| GET `/reports/all-clients` | Export report | 35 | $0.2625 |
+| POST `/appointment/checkout` | Clock out (AI + billable) | 60 | $0.450 |
+| POST `/xero/sync` | Xero sync | 60 | $0.450 |
+| Any `4xx` or `5xx` | Error response | 0 | $0.00 |
+
+### Monthly cost by organisation size
+
+| Workers | Est. Units/Month | Overage | Monthly Total |
+| --- | --- | --- | --- |
+| ≤ 100 | ~80,000 | 0 | **$1,900** |
+| 200 | ~160,000 | 0 | **$1,900** |
+| 500 | ~400,000 | 0 | **$1,900** |
+| 700 | ~560,000 | 160,000 | **$3,100** |
+| 1,000 | ~850,000 | 450,000 | **$5,275** |
+| 2,000 | ~1,700,000 | 1,300,000 | **$11,650** |
+
+*Estimates assume roughly 800 units per worker per month across reads, writes, and shift completions.*

@@ -1,0 +1,48 @@
+---
+title: "Usage Tracking"
+description: "How Imploy calculates, stores, and exposes API usage events."
+---
+
+Every API call is tracked, calculated, and reported for billing.
+
+### How it works
+
+1. The middleware reads `bulk_item_count` from request attributes on bulk endpoints.
+2. It posts a usage event to the API management server at `http://127.0.0.1:8083/api/internal/usage-event`.
+3. The API management server queues a `ProcessUsageEvent` job on the `api-usage` queue.
+4. `UnitCalculatorService::calculate()` determines units from endpoint, method, status code, and item count.
+5. The event is stored in `api_usage_events` with `units`, `category`, `reason`, and `duration_ms`.
+6. If `units > 0`, a `SendStripeUsageEvent` job reports the event to Stripe.
+
+### Usage event record
+
+```json
+{
+  "customer_id": 1,
+  "endpoint": "/api/web/v1/scheduler/publish",
+  "method": "POST",
+  "status_code": 200,
+  "units": 50,
+  "weight_category": "bulk",
+  "duration_ms": 142,
+  "metadata": {
+    "ip": "203.0.113.5",
+    "user_agent": "Mozilla/5.0 ...",
+    "bulk_item_count": 50,
+    "endpoint_category": "scheduler",
+    "reason": "bulk_per_item"
+  }
+}
+```
+
+### Checking your usage
+
+All usage endpoints require the `X-App-ID` header or an `?app_id=` query parameter.
+
+| Method | Endpoint | Description |
+| --- | --- | --- |
+| GET | `/api/v1/usage/current` | Current period usage |
+| GET | `/api/v1/usage/history?days=30` | Historical usage |
+| GET | `/api/v1/usage/breakdown` | Category breakdown |
+| GET | `/api/v1/usage/top-endpoints?limit=10` | Top endpoints |
+| GET | `/api/v1/usage/predictions` | Usage predictions |

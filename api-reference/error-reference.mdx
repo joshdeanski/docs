@@ -1,0 +1,44 @@
+---
+title: "Error Reference"
+description: "Response codes and common error formats used by the Imploy API."
+---
+
+All `4xx` and `5xx` responses consume `0` units. You never pay for errors.
+
+### HTTP status codes
+
+| Code | Meaning | Billed? |
+| --- | --- | --- |
+| 200 | Success | **Yes** |
+| 201 | Created | **Yes** |
+| 207 | Multi-Status (bulk partial success) | **Yes** |
+| 400 | Validation error | **No** |
+| 401 | Authentication failed | **No** |
+| 403 | Forbidden or insufficient permission | **No** |
+| 404 | Record not found | **No** |
+| 422 | Business rule violation | **No** |
+| 429 | Rate limit exceeded | **No** |
+| 500 | Server error | **No** |
+
+### Error body format
+
+```json
+{
+  "message": "The given data was invalid.",
+  "errors": {
+    "client_id": ["The client id field is required."],
+    "start": ["The start must be a valid date."]
+  }
+}
+```
+
+### Common errors
+
+| Scenario | Code | Message |
+| --- | --- | --- |
+| Missing or invalid API key | 401 | `Unauthorized` |
+| Key is revoked | 401 | `Invalid API key` |
+| Rate limit exceeded | 429 | `Too Many Attempts.` |
+| Validation failed | 400 | `The given data was invalid.` |
+| Record not found | 404 | `Not found` |
+| Wrong tenant or no access | 403 | `Forbidden` |

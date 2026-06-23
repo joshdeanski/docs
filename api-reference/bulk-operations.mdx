@@ -1,0 +1,68 @@
+---
+title: "Bulk Operations"
+description: "Batching rules, response format, and per-item billing references for bulk endpoints."
+---
+
+Optimise API usage with intelligent batching strategies.
+
+### General rules
+
+- All bulk endpoints accept up to **500 items** per call.
+- Billing follows `max(min_units, item_count)`, so the minimum charge always applies.
+- The API returns HTTP `201` if all items succeed and HTTP `207 Multi-Status` if any fail.
+- Failed items return `errors` per index so only the failed items need to be retried.
+- Errors on individual items do not roll back successful items.
+
+### Bulk response format
+
+```json
+{
+  "created": 48,
+  "failed": 2,
+  "results": [
+    { "index": 0, "id": 101 },
+    { "index": 1, "id": 102 }
+  ],
+  "errors": [
+    {
+      "index": 2,
+      "item": { "client_id": 999 },
+      "errors": { "client_id": ["Client not found."] }
+    }
+  ]
+}
+```
+
+### Bulk per-item endpoint reference
+
+| Endpoint | Item counted as | Min units |
+| --- | --- | --- |
+| `POST /scheduler/publish` | shifts published | 25 |
+| `POST /scheduler/unpublish` | shifts unpublished | 25 |
+| `DELETE /roster/delete/recurring/{id}` | shifts in series deleted | 25 |
+| `GET /roster/send-multiple-notifications/{id}/{type}` | workers notified | 25 |
+| `POST /site/roster/publish` | site shifts published | 25 |
+| `POST /site/roster/unpublish` | site shifts unpublished | 25 |
+| `DELETE /site/roster/delete/recurring/{id}` | shifts in series deleted | 25 |
+| `GET /site/roster/send-multiple-notifications/{id}/{type}` | workers notified | 25 |
+| `PUT /timesheet/shift/include-bulk` | shifts included | 25 |
+| `POST /client/billable-entry/bulk-update-status` | entries updated | 25 |
+| `POST /client/billable-entry/bulk-delete` | entries deleted | 25 |
+| `POST /client/billable-entry/convert-pending` | entries converted | 25 |
+| `POST /claims/ndia-entries/update-status` | NDIA entries updated (heavy) | 35 |
+| `POST /settings/import` | rows x 30 columns | 25 |
+| `POST /clients/bulk-create` | clients created | 25 |
+| `POST /invoices/bulk-create` | invoices created | 25 |
+| `POST /billable-entries/bulk-create` | entries created | 25 |
+| `POST /scheduler/bulk-create` | shifts created | 25 |
+| `POST /scheduler/bulk-checkin` | clock-ins processed | 25 |
+| `POST /scheduler/bulk-checkout` | clock-outs processed | 25 |
+| `PUT /scheduler/bulk-update-status` | shifts updated | 25 |
+
+### Cost-optimisation tips
+
+- **Batch intelligently:** one call with 50 items at 50 units costs the same as two 25-item calls, but a single call reduces latency and rate-limit pressure.
+- **Respect the minimum floor:** publishing a single shift still costs 25 units, so very small batches are inefficient.
+- **Validate imports before sending:** a 100-row import consumes 3,000 units and becomes expensive quickly.
+- **Use free error responses to your advantage:** a `404` existence check is free; only successful requests are billed.
+- **Treat checkout AI as fixed-cost:** every `appointment/checkout` request triggers the AI pipeline and bills at 60 units even when no cautions are found.

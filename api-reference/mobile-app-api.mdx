@@ -1,0 +1,127 @@
+---
+title: "Mobile App API"
+description: "Endpoint groups used by the Imploy staff mobile application."
+---
+
+**Base URL:** `https://app.imploy.com.au/api/v1`  
+**Auth:** `Authorization: Bearer <sanctum-token>`
+
+## Appointments / Shifts
+
+| Method | Endpoint | Description | Units |
+| --- | --- | --- | --- |
+| GET | `/appointments` | This worker's upcoming appointments | 2 |
+| GET | `/monthwiseshift` | Appointments grouped by month | 2 |
+| GET | `/weeklyhours` | Hours worked this week | 2 |
+| GET | `/shift-pool` | Available unassigned shifts | 2 |
+| POST | `/acceptshift` | Accept a shift from pool | 8 |
+| POST | `/declineshift` | Decline a shift | 8 |
+| POST | `/appointment/checkin` | Clock in to a shift | 8 |
+| POST | `/appointment/checkout` | **Clock out: AI caution analysis, billable entry, and budget deduction** | 60 |
+| POST | `/appointment/shiftnote` | **Submit shift note with AI caution analysis** | 60 |
+
+#### Checkout payload
+
+```json
+{
+  "appointment_id": 101,
+  "shift_notes": "Client was in good spirits. Medication administered on time. No concerns.",
+  "time": "2026-07-07T11:05:00",
+  "kms_travelled": 12.4
+}
+```
+
+<Info>
+Checkout records the time, saves notes, runs Azure OpenAI GPT-5.4 safety analysis, creates `ShiftCaution` records for severity `>= 5`, notifies care managers, creates billable entries, applies budget deductions, and can auto-create travel claims when consecutive appointments are detected.
+</Info>
+
+## Clients
+
+| Method | Endpoint | Description | Units |
+| --- | --- | --- | --- |
+| GET | `/clients` | Clients assigned to this worker | 2 |
+| GET | `/client/{id}` | Client profile | 2 |
+| GET | `/client/photo/{id}` | Client profile photo | 2 |
+| GET | `/client/shiftnote/{id}` | Specific shift note | 2 |
+| GET | `/client/shiftnote/photo/{appointmentId}/{noteId}` | Photo from shift note | 2 |
+| GET | `/client/careplanfile/{id}` | Download care plan file | 2 |
+| GET | `/careplan/{id}` | Care plan for a client | 2 |
+| GET | `/assessments/{id}` | Client assessments | 2 |
+| GET | `/general-documents/{id}` | Client general documents | 2 |
+| GET | `/get-assessment/file/{id}` | Download assessment file | 2 |
+| GET | `/get-general-document/file/{id}` | Download general document | 2 |
+| POST | `/client-incident` | Report a client incident | 8 |
+
+## Availability
+
+| Method | Endpoint | Description | Units |
+| --- | --- | --- | --- |
+| GET | `/availability` | This worker's availability | 2 |
+| GET | `/defaultavailability` | Default availability settings | 2 |
+| POST | `/availability/store` | Save or update availability | 8 |
+| POST | `/availability/check` | Check availability for a date or range | 8 |
+
+### Leave
+
+| Method | Endpoint | Description | Units |
+| --- | --- | --- | --- |
+| GET | `/leaves` | This worker's leave requests | 2 |
+| POST | `/leave/store` | Submit a leave request | 8 |
+| POST | `/leave/update/{id}` | Update a leave request | 8 |
+| POST | `/leave/check` | Check leave balance or conflicts | 8 |
+
+### Notifications
+
+| Method | Endpoint | Description | Units |
+| --- | --- | --- | --- |
+| GET | `/notifications` | Notifications for this worker | 2 |
+
+### Payslips
+
+| Method | Endpoint | Description | Units |
+| --- | --- | --- | --- |
+| GET | `/payslips` | List payslips | 2 |
+| GET | `/payslip/{id}` | Get a specific payslip | 2 |
+| DELETE | `/payslip/X7u9R/{filename}` | Delete a payslip file | 8 |
+
+### Travel Claims
+
+| Method | Endpoint | Description | Units |
+| --- | --- | --- | --- |
+| GET | `/travel-claims` | List travel claims | 2 |
+
+### Documents
+
+| Method | Endpoint | Description | Units |
+| --- | --- | --- | --- |
+| GET | `/user/document/list` | List worker documents | 2 |
+| GET | `/user/documents` | All worker documents | 2 |
+| GET | `/user/getdocument/{id}` | Download a specific document | 2 |
+| POST | `/user/document/upload` | Upload a compliance or HR document | 8 |
+| DELETE | `/user/document/delete/{id}` | Delete a document | 8 |
+
+### User Account
+
+| Method | Endpoint | Description | Units |
+| --- | --- | --- | --- |
+| GET | `/user` | Current worker profile | 2 |
+| GET | `/user/photo` | Profile photo | 2 |
+| POST | `/user/update` | Update profile | 8 |
+| POST | `/change/password` | Change password | 8 |
+| POST | `/otp/send` | Send 2FA OTP | 8 |
+| POST | `/otp/turnon` | Enable two-factor auth | 8 |
+| POST | `/otp/turnoff` | Disable two-factor auth | 8 |
+| POST | `/logout` | Log out and invalidate token | 8 |
+
+### Site Appointments (SIL / Group Home)
+
+| Method | Endpoint | Description | Units |
+| --- | --- | --- | --- |
+| GET | `/site/appointments` | List site appointments | 2 |
+| GET | `/site/shift-pool` | Site shift pool | 2 |
+| POST | `/site/acceptshift` | Accept a site shift | 8 |
+| POST | `/site/declineshift` | Decline a site shift | 8 |
+| POST | `/site/appointment/checkin` | Clock in to a site shift | 8 |
+| POST | `/site/appointment/checkout` | **Clock out with AI analysis and split billable entries per client** | 60 |
+| POST | `/site/appointment/shiftnote` | **Submit site shift note with AI caution analysis** | 60 |
+| GET | `/site/appointment/photo/{appointmentId}/{noteId}` | Photo from site shift note | 2 |

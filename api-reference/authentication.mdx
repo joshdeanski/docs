@@ -1,0 +1,73 @@
+---
+title: "Authentication & Rate Limits"
+description: "Authentication flows and request throttling across all Imploy API surfaces."
+---
+
+Three authentication methods are used across the three Imploy API surfaces.
+
+### Enterprise API: API key
+
+Every enterprise request must include your API key:
+
+```
+X-API-Key: impl_live_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+```
+
+You can also send the same key as a bearer token:
+
+```
+Authorization: Bearer impl_live_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+```
+
+<Info>
+**Key format:** `impl_live_<22-char-prefix><secret-suffix>`. Keys are bcrypt-hashed at rest. The first 22 characters identify the key, and the full value is validated on each request and cached for 5 minutes.
+</Info>
+
+| Status | Behaviour |
+| --- | --- |
+| active | Requests proceed normally |
+| revoked | Returns `401 Unauthorized` |
+| expired | Returns `401 Unauthorized` |
+
+### Mobile app: Sanctum token
+
+Staff authenticate via the login endpoint:
+
+```
+POST /api/v1/login
+Content-Type: application/json
+
+{ "email": "worker@example.com", "password": "..." }
+```
+
+Include the returned `token` on all subsequent requests:
+
+```
+Authorization: Bearer <sanctum-token>
+```
+
+### Web frontend: Sanctum cookie or token
+
+The React SPA uses Laravel Sanctum's cookie-based session authentication. The token is stored in memory rather than `localStorage` and is injected into requests by `api.ts`.
+
+## Rate limits
+
+Exceeded limits return `429 Too Many Requests`.
+
+| Tier | Limit | Window |
+| --- | --- | --- |
+| Enterprise API | **300** requests | per minute |
+| Mobile App | **60** requests | per minute |
+| Web Frontend | **60** requests | per minute |
+
+#### Response headers
+
+```
+X-RateLimit-Limit: 300
+X-RateLimit-Remaining: 241
+Retry-After: 34        (only present on 429)
+```
+
+<Warning>
+When a rate limit is exceeded, the API returns `{ "message": "Too Many Attempts." }` and the request is **not billed**.
+</Warning>

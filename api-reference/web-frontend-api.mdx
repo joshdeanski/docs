@@ -1,0 +1,309 @@
+---
+title: "Web Frontend API"
+description: "Endpoint groups used by the Imploy web application."
+---
+
+**Base URL:** `https://app.imploy.com.au/api/web/v1`  
+**Auth:** Sanctum cookie session or bearer token
+
+## Dashboard
+
+| Method | Endpoint | Description | Units |
+| --- | --- | --- | --- |
+| GET | `/dashboard` | KPIs and upcoming shifts | 2 |
+| GET | `/dashboard/weekly-data` | Weekly activity summary | 2 |
+| GET | `/dashboard/shift-caution-overview` | AI-flagged shift caution feed | 2 |
+| POST | `/dashboard/onboarding-settings` | Save onboarding preferences | 8 |
+| GET | `/global-search` | Search clients, staff, and sites | 2 |
+| GET | `/global-document/{type}/{id}/{download?}` | Download any document | 2 |
+| GET | `/intercom-token` | Intercom auth token | 2 |
+
+## Client Records
+
+| Method | Endpoint | Description | Units |
+| --- | --- | --- | --- |
+| GET | `/client-records` | List all clients | 2 |
+| GET | `/client-records/{type}` | Clients by type (NDIS, HCP, and more) | 2 |
+| GET | `/client-record/create` | Create form scaffold | 2 |
+| POST | `/client-record/step1` | Create client: basic info | 8 |
+| PUT | `/client-record/step2/{id}` | Update contact info | 8 |
+| GET | `/client-record/step3/{id}` | Get step 3 form | 2 |
+| PUT | `/client-record/step3/{id}` | Update funding details | 8 |
+| PUT | `/client-record/step4/{id}` | Update compliance | 8 |
+| GET | `/client-record/{id}/overview` | Client overview | 2 |
+| GET | `/client-record/{id}/details` | Client detail or about tab | 2 |
+| GET | `/client-record/{id}/notes` | Client notes tab | 2 |
+| GET | `/client-record/{id}/rosters` | Client shift history | 2 |
+| GET | `/client-record/{id}/budgets` | Client budget summary | 2 |
+| GET | `/client-record/{id}/care-plans` | Client care plans | 2 |
+| GET | `/client-record/{id}/assessment-documents` | Assessment documents | 2 |
+| GET | `/client-record/{id}/general-documents` | General documents | 2 |
+| GET | `/client-record/{id}/secure-documents` | Secure documents | 2 |
+| GET | `/client-record/{id}/documents` | All documents | 2 |
+| GET | `/client-record/{id}/billable-entries` | Billable entries | 2 |
+| GET | `/client-record/{id}/connections` | Contacts and health professionals | 2 |
+| GET | `/client-record/{id}/financial` | Financial summary | 2 |
+| GET | `/client-record/{id}/ndis/care-plans` | NDIS care plans | 2 |
+| GET | `/client-record/{id}/tasks` | Client tasks | 2 |
+| GET | `/client-record/{id}/summary-counts` | Document and incident counts | 2 |
+| GET | `/client-record/{id}/overwatch` | **AI shift caution feed** | 2 |
+| PUT | `/client-record/{id}/profile` | Update client profile | 8 |
+| PUT | `/client-record/{id}/custom-fields` | Update custom fields | 8 |
+| PUT | `/client-records/ndis-funding-details/{id}` | Update NDIS funding | 8 |
+
+### Client Detail Tabs
+
+| Method | Endpoint | Description | Units |
+| --- | --- | --- | --- |
+| PUT | `/client-record/account-info/{id}` | Update account info | 8 |
+| PUT | `/client-record/general-info/{id}` | Update general info | 8 |
+| PUT | `/client-record/contact-info/{id}` | Update contact info | 8 |
+| PUT | `/client-record/allergies/{id}` | Update allergies | 8 |
+| PUT | `/client-record/funding-details/{id}` | Update HCP or private funding | 8 |
+| PUT | `/client-record/private-funding-details/{id}` | Update private funding | 8 |
+| PUT | `/client-record/compliance-requirements/{id}` | Update compliance requirements | 8 |
+| PUT | `/client-record/staff-preference/{id}` | Preferred or excluded staff | 8 |
+| PUT | `/client-record/exclude-user/{id}` | Exclude a staff member | 8 |
+| PUT | `/client-record/team-allocation/{id}` | Team allocation | 8 |
+| PUT | `/client-record/shift-notes-template/{id}` | Set shift notes template | 8 |
+| PUT | `/client-record/client-notes/{id}` | Client notes setting | 8 |
+| POST | `/client-record/check-staff-compliance` | Check staff compliance requirements | 8 |
+| POST | `/client-record/client-note` | Add a client note | 8 |
+| PUT | `/client-record/client-note/update/{id}` | Update a note | 8 |
+| DELETE | `/client-record/note/delete/{id}` | Delete a note | 8 |
+| POST | `/client-record/activity` | Log an activity | 8 |
+| GET | `/client-record/notes-activity/file/{id}` | Download file from notes | 2 |
+| POST | `/client-record/shiftnote/store` | Store a shift note | 8 |
+| POST | `/client-record/shiftnote/simplify` | **AI simplify shift note** | 60 |
+| GET | `/client-record/shiftnote/photo/{appointmentId}/{noteId}` | Shift note photo | 2 |
+| DELETE | `/client-record/shiftnote/delete/{id}` | Delete shift note | 8 |
+| DELETE | `/client-record/ai-shift-caution/delete/{id}` | Dismiss AI shift caution | 8 |
+| PUT | `/client-record/shift-note/visibility/{id}` | Toggle note visibility | 8 |
+| POST | `/client-record/ai-notes` | **Generate AI notes** | 60 |
+
+### Client Documents
+
+| Method | Endpoint | Description | Units |
+| --- | --- | --- | --- |
+| POST | `/client/assessment-document/store` | Upload assessment document | 8 |
+| POST | `/client/assessment-document/store-from-form` | Create from form | 8 |
+| PUT | `/client/assessment-document/update/{id}` | Update | 8 |
+| GET | `/client/assessment-document/{id}` | Get | 2 |
+| GET | `/client/assessment-document/{id}/download` | Download | 2 |
+| DELETE | `/client/assessment-document/delete/{id}` | Delete | 8 |
+| POST | `/client/general-document/store` | Upload general document | 8 |
+| POST | `/client/general-document/store-from-form` | Create from form | 8 |
+| PUT | `/client/general-document/update/{id}` | Update | 8 |
+| GET | `/client/general-document/{id}` | Get | 2 |
+| GET | `/client/general-document/{id}/download` | Download | 2 |
+| DELETE | `/client/general-document/delete/{id}` | Delete | 8 |
+| POST | `/client/secure-document/store` | Upload secure document | 8 |
+| POST | `/client/secure-document/store-from-form` | Create from form | 8 |
+| PUT | `/client/secure-document/update/{id}` | Update | 8 |
+| GET | `/client/secure-document/{id}` | Get | 2 |
+| GET | `/client/secure-document/{id}/download` | Download | 2 |
+| DELETE | `/client/secure-document/delete/{id}` | Delete | 8 |
+| POST | `/client/secure-document/assign-user` | Assign staff access | 8 |
+
+### Client Budgets & NDIS
+
+| Method | Endpoint | Description | Units |
+| --- | --- | --- | --- |
+| POST | `/client/budget/store` | Create a client budget | 8 |
+| PUT | `/client/budget/update/{id}` | Update a budget | 8 |
+| DELETE | `/client/budget/delete/{id}` | Delete a budget | 8 |
+| GET | `/client/budget/activity/{id}` | Budget activity and spend history | 2 |
+| GET | `/client/budget/at-risk` | Clients with at-risk budgets | 2 |
+| GET | `/client/budget/audit-trail/{budgetId}` | Full budget audit trail | 2 |
+| POST | `/client/budget/rollover` | Roll budget to a new period | 8 |
+| DELETE | `/client/budget/rollover/{rolloverKey}` | Delete rollover | 8 |
+| POST | `/client/budget/temporary-funding` | Add temporary funding | 8 |
+| PUT | `/client/budget/temporary-funding/{groupId}` | Update temporary funding | 8 |
+| DELETE | `/client/budget/temporary-funding/{groupId}` | Remove temporary funding | 8 |
+| POST | `/client/budget/sync-temp-funding/{id}` | Sync temporary funding to actual | 8 |
+| POST | `/client/budget/{budgetId}/ndis-agreement/save` | Save NDIS service agreement | 8 |
+| DELETE | `/client/budget/{budgetId}/ndis-agreement/{agreementId}` | Delete agreement | 8 |
+| POST | `/client/budget/{budgetId}/ndis-agreement/{agreementId}/send-for-signing` | Send for e-signing | 8 |
+| GET | `/client/budget/{budgetId}/ndis-agreements` | List NDIS agreements | 2 |
+| GET | `/client/budget/{budgetId}/ndis-agreements/summary` | Agreements summary | 2 |
+
+### Client Billable Entries
+
+| Method | Endpoint | Description | Units |
+| --- | --- | --- | --- |
+| GET | `/client/billable-entry/all` | All billable entries | 2 |
+| GET | `/client/billable-entry/pending` | All pending entries | 2 |
+| POST | `/client/billable-entry/store` | Create a billable entry | 8 |
+| PUT | `/client/billable-entry/update/{id}` | Update a billable entry | 8 |
+| DELETE | `/client/billable-entry/delete/{id}/{type}` | Delete a billable entry | 8 |
+| PUT | `/client/billable-entry/update-status/{id}/{type}` | Update status (single) | 8 |
+| POST | `/client/billable-entry/bulk-update-status` | **Bulk update statuses, billed per entry** | max(25,N) |
+| POST | `/client/billable-entry/bulk-delete` | **Bulk delete, billed per entry** | max(25,N) |
+| POST | `/client/billable-entry/convert-pending` | **Convert pending to billable, billed per entry** | max(25,N) |
+| POST | `/billable-entry/task/store` | Create billable from a task | 8 |
+
+## Roster / Scheduler
+
+| Method | Endpoint | Description | Units |
+| --- | --- | --- | --- |
+| GET | `/rosters` | List roster shifts | 2 |
+| GET | `/rosters/getdata` | AJAX data for roster calendar | 2 |
+| POST | `/roster/store` | Create a shift | 8 |
+| PUT | `/roster/update/{id}` | Update a shift | 8 |
+| DELETE | `/roster/delete/{id}` | Delete a shift | 8 |
+| DELETE | `/roster/delete/recurring/{id}` | **Delete recurring series, billed per shift in series** | max(25,N) |
+| PUT | `/roster/update/recurring/{id}` | Update recurring series | 8 |
+| PUT | `/roster/update/move/{id}` | Move or drag a shift | 8 |
+| PUT | `/roster/cancel-shift/{id}` | Cancel a shift | 8 |
+| POST | `/roster/checkin` | Manual clock in | 8 |
+| POST | `/roster/checkout` | Manual clock out | 8 |
+| POST | `/roster/shift-note` | Add shift note | 8 |
+| POST | `/roster/publish` | **Publish shifts, billed per shift published** | max(25,N) |
+| POST | `/roster/unpublish` | **Unpublish shifts, billed per shift** | max(25,N) |
+| GET | `/roster/publish-history` | History of publish actions | 2 |
+| POST | `/roster/sendroster` | **Email roster to workers** | 60 |
+| POST | `/roster/checkavailability` | Check worker availability | 8 |
+| GET | `/roster/send-notification/{id}/{type}/{userid}` | Notify one worker of a shift | 2 |
+| GET | `/roster/send-multiple-notifications/{id}/{type}` | **Notify all workers on a shift, billed per worker** | max(25,N) |
+
+### Site Management (SIL / Group Home)
+
+| Method | Endpoint | Description | Units |
+| --- | --- | --- | --- |
+| GET | `/sites` | List all sites | 2 |
+| POST | `/site/store` | Create a site | 8 |
+| GET | `/site/{id}` | Site overview | 2 |
+| PUT | `/site/basic-info/{id}` | Update basic info | 8 |
+| PUT | `/site/description/{id}` | Update description | 8 |
+| PUT | `/site/house-info/{id}` | Update house info | 8 |
+| PUT | `/site/site-details/{id}` | Update site details | 8 |
+| DELETE | `/site/delete/{id}` | Delete a site | 8 |
+| GET | `/site/{id}/overwatch` | **AI shift caution overwatch** | 2 |
+| POST | `/site/roster/publish` | **Publish site shifts, billed per shift** | max(25,N) |
+| POST | `/site/roster/unpublish` | **Unpublish site shifts, billed per shift** | max(25,N) |
+| DELETE | `/site/roster/delete/recurring/{id}` | **Delete recurring series, billed per shift** | max(25,N) |
+| POST | `/site/roster/sendroster` | **Email roster to site workers** | 60 |
+| GET | `/site/roster/send-multiple-notifications/{id}/{type}` | **Notify all site workers, billed per worker** | max(25,N) |
+
+### Timesheets
+
+| Method | Endpoint | Description | Units |
+| --- | --- | --- | --- |
+| GET | `/timesheets` | List timesheets | 2 |
+| POST | `/timesheet/store` | Create a timesheet | 8 |
+| GET | `/timesheet/{id}` | Get timesheet details | 2 |
+| DELETE | `/timesheet/delete/{id}` | Delete a timesheet | 8 |
+| PUT | `/timesheet/finalise/{id}` | Finalise and lock a timesheet | 8 |
+| PUT | `/timesheet/unfinalise/{id}` | Unfinalise a timesheet | 8 |
+| GET | `/timesheet/export/{id}` | Export to CSV or PDF | 35 |
+| PUT | `/timesheet/shift/include-shift/{id}` | Include or exclude a shift | 8 |
+| PUT | `/timesheet/shift/include-bulk` | **Bulk include or exclude shifts, billed per shift** | max(25,N) |
+| PUT | `/timesheet/shift/lock/{id}` | Lock a timesheet shift | 8 |
+| PUT | `/timesheet/shift/unlock/{id}` | Unlock a timesheet shift | 8 |
+
+## Finance
+
+| Method | Endpoint | Description | Units |
+| --- | --- | --- | --- |
+| GET | `/finance-invoicing/fetch/{type?}` | List invoices | 2 |
+| GET | `/finance-invoicing/generated-invoices` | Generated invoice data | 2 |
+| POST | `/finance-invoicing/bulk-generate` | **Bulk generate invoices (heavy)** | 35 |
+| GET | `/finance-invoicing/bulk-drafts` | List bulk invoice drafts | 2 |
+| GET | `/finance-invoicing/bulk-draft/{id}` | Get bulk draft | 2 |
+| POST | `/finance-invoicing/bulk-draft/{id}/resync` | Re-sync a bulk draft | 8 |
+| POST | `/finance-invoicing/bulk-invoice-store` | Store invoice from bulk draft | 8 |
+| POST | `/invoices/email` | **Email an invoice** | 60 |
+| GET | `/invoices/{invoiceId}/download` | Download invoice PDF | 2 |
+| GET | `/settings/xero/auth-url` | Get Xero OAuth URL | 2 |
+| POST | `/settings/xero/complete-connection` | Complete Xero OAuth flow | 8 |
+| GET | `/settings/xero/connection-status` | Check Xero connection | 2 |
+| POST | `/settings/xero/disconnect` | Disconnect Xero | 8 |
+| POST | `/finances/xero/push-timesheet` | **Push timesheet to Xero payroll** | 60 |
+| POST | `/finances/xero/sync-invoices` | **Sync invoices with Xero** | 60 |
+| POST | `/finances/xero/execute-employee-sync` | **Execute employee sync to Xero** | 60 |
+| POST | `/finances/xero/pull-from-xero` | **Pull data from Xero** | 60 |
+| POST | `/settings/quickbooks/sync-invoices` | **Sync invoices with QuickBooks** | 60 |
+| GET | `/settings/quickbooks/connection-status` | Check QuickBooks connection | 2 |
+| POST | `/settings/quickbooks/disconnect` | Disconnect QuickBooks | 8 |
+
+### NDIA Claims
+
+| Method | Endpoint | Description | Units |
+| --- | --- | --- | --- |
+| GET | `/claims/ndia-claims` | List NDIA claims | 2 |
+| POST | `/claims/ndia-claims` | Create a NDIA claim | 8 |
+| GET | `/claims/ndia-claims/{ref}` | Get a specific claim | 2 |
+| DELETE | `/claims/ndia-claims/{ref}` | Delete a claim | 8 |
+| PUT | `/claims/ndia-claims/{ref}/sync` | **Sync claim with NDIA** | 60 |
+| GET | `/claims/ndia-entries` | Billable entries awaiting NDIA claiming | 35 |
+| POST | `/claims/ndia-entries/update-status` | **Update NDIA entry statuses, billed per entry (heavy)** | max(35,N) |
+
+## Reports
+
+All report endpoints are classified as **heavy** at `35` units per call.
+
+| Method | Endpoint | Description | Units |
+| --- | --- | --- | --- |
+| GET | `/reports/all-clients` | Export all clients | 35 |
+| GET | `/reports/all-users` | Export all staff | 35 |
+| GET | `/reports/all-incidents` | All incidents | 35 |
+| GET | `/reports/all-incident-associated` | Incidents with associated people | 35 |
+| GET | `/reports/all-client-careplans` | Client care plans | 35 |
+| GET | `/reports/all-client-shiftcautions` | AI shift cautions (clients) | 35 |
+| GET | `/reports/all-site-shiftcautions` | AI shift cautions (sites) | 35 |
+| GET | `/reports/all-staff-documents` | Staff compliance documents | 35 |
+| GET | `/reports/hcp-client-budgets` | HCP client budgets | 35 |
+| GET | `/reports/ndis-client-budgets` | NDIS client budgets | 35 |
+| GET | `/reports/service-hours-weekly` | Weekly service hours | 35 |
+| GET | `/reports/client-weekly-sh-comparison` | Client weekly service hours comparison | 35 |
+
+## AI Features
+
+| Method | Endpoint | Description | Units |
+| --- | --- | --- | --- |
+| POST | `/client-record/shiftnote/simplify` | Simplify a shift note with AI | 60 |
+| POST | `/client-record/ai-notes` | Generate AI notes for a client | 60 |
+| GET | `/vacant-shift/advanced-recommendations/{id}` | AI worker recommendations for a vacant shift | 60 |
+| GET | `/vacant-shift/recommendations` | AI worker recommendations | 60 |
+
+### Inbox / SMS
+
+| Method | Endpoint | Description | Units |
+| --- | --- | --- | --- |
+| GET | `/inbox/threads` | List SMS conversation threads | 2 |
+| GET | `/inbox/messages` | Messages in a thread | 2 |
+| GET | `/inbox/unread-count` | Unread count | 2 |
+| POST | `/inbox/mark-read` | Mark messages as read | 8 |
+| POST | `/inbox/send` | **Send an SMS via Textmagic** | 60 |
+| POST | `/inbox/sync` | Sync incoming messages | 8 |
+
+### Settings
+
+| Method | Endpoint | Description | Units |
+| --- | --- | --- | --- |
+| GET | `/settings` | Get all settings | 2 |
+| PUT | `/settings/business/update` | Update business details | 8 |
+| PUT | `/settings/timezone/update` | Update timezone | 8 |
+| POST | `/settings/import` | **Bulk import, billed per cell (rows x 30 columns)** | max(25, rowsx30) |
+| GET | `/settings/shift-note-templates` | List shift note templates | 2 |
+| POST | `/settings/shift-note-templates` | Create template | 8 |
+| PUT | `/settings/shift-note-templates/{id}` | Update template | 8 |
+| DELETE | `/settings/shift-note-templates/{id}` | Delete template | 8 |
+
+#### Import billing detail
+
+```
+POST /settings/import
+ 5 rows  ->  5 x 30 = 150 cells  ->  150 units   =  $1.125
+10 rows  -> 10 x 30 = 300 cells  ->  300 units   =  $2.250
+50 rows  -> 50 x 30 = 1,500 cells -> 1,500 units =  $11.25
+```
+
+### Vacant Shifts
+
+| Method | Endpoint | Description | Units |
+| --- | --- | --- | --- |
+| GET | `/vacant-shifts` | List all vacant shifts | 2 |
+| POST | `/vacant-shift/assign` | Assign a worker to a shift | 8 |
+| GET | `/vacant-shift/advanced-recommendations/{id}` | **AI worker recommendations** | 60 |
+| POST | `/vacant-shift/get-staff-schedule/{staffId}` | Worker schedule for conflict checking | 8 |

@@ -1,0 +1,1796 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Imploy Platform API Documentation</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --primary-light: #dbeafe;
+            --success: #059669;
+            --success-light: #d1fae5;
+            --warning: #d97706;
+            --warning-light: #fef3c7;
+            --danger: #dc2626;
+            --danger-light: #fee2e2;
+            --purple: #7c3aed;
+            --purple-light: #ede9fe;
+            --gray-50: #f8fafc;
+            --gray-100: #f1f5f9;
+            --gray-200: #e2e8f0;
+            --gray-300: #cbd5e1;
+            --gray-400: #94a3b8;
+            --gray-500: #64748b;
+            --gray-600: #475569;
+            --gray-700: #334155;
+            --gray-800: #1e293b;
+            --gray-900: #0f172a;
+            --radius: 8px;
+            --radius-lg: 12px;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: var(--gray-800);
+            background: var(--gray-50);
+            line-height: 1.6;
+            font-size: 15px;
+        }
+        .header {
+            background: linear-gradient(135deg, var(--gray-900) 0%, #1a365d 50%, var(--primary-dark) 100%);
+            color: white;
+            padding: 60px 0 40px;
+            position: relative;
+            overflow: hidden;
+        }
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.5;
+        }
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+            position: relative;
+            z-index: 1;
+        }
+        .header-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+            padding: 6px 16px;
+            border-radius: 100px;
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 20px;
+        }
+        .header-badge .dot {
+            width: 8px; height: 8px;
+            background: #22c55e;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .header h1 {
+            font-size: 42px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            letter-spacing: -0.02em;
+        }
+        .header-subtitle {
+            font-size: 18px;
+            color: rgba(255,255,255,0.7);
+            max-width: 600px;
+            line-height: 1.5;
+        }
+        .header-meta {
+            display: flex;
+            gap: 24px;
+            margin-top: 24px;
+            flex-wrap: wrap;
+        }
+        .header-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: rgba(255,255,255,0.8);
+        }
+        .header-meta-item svg {
+            width: 16px; height: 16px;
+            opacity: 0.7;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+        .main-layout {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 32px;
+            padding: 32px 0;
+        }
+        .sidebar {
+            position: sticky;
+            top: 24px;
+            height: calc(100vh - 48px);
+            overflow-y: auto;
+            padding-right: 8px;
+        }
+        .sidebar::-webkit-scrollbar { width: 4px; }
+        .sidebar::-webkit-scrollbar-track { background: transparent; }
+        .sidebar::-webkit-scrollbar-thumb { background: var(--gray-300); border-radius: 4px; }
+        .sidebar-title {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--gray-400);
+            padding: 16px 12px 8px;
+        }
+        .sidebar-nav { list-style: none; }
+        .sidebar-nav li { margin: 2px 0; }
+        .sidebar-nav a {
+            display: block;
+            padding: 8px 12px;
+            border-radius: var(--radius);
+            color: var(--gray-600);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.15s ease;
+        }
+        .sidebar-nav a:hover {
+            background: var(--gray-100);
+            color: var(--gray-800);
+        }
+        .sidebar-nav a.active {
+            background: var(--primary-light);
+            color: var(--primary);
+        }
+        .sidebar-nav .sub-nav {
+            list-style: none;
+            padding-left: 12px;
+            margin-top: 2px;
+        }
+        .sidebar-nav .sub-nav a {
+            font-size: 13px;
+            font-weight: 400;
+            padding: 6px 12px;
+            color: var(--gray-500);
+        }
+        .sidebar-nav .sub-nav a:hover { color: var(--gray-700); }
+        .content { min-width: 0; }
+        .section {
+            background: white;
+            border-radius: var(--radius-lg);
+            padding: 32px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--gray-200);
+        }
+        .section-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .section-title .icon {
+            width: 32px; height: 32px;
+            background: var(--primary-light);
+            border-radius: var(--radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 16px;
+            font-weight: 700;
+        }
+        .section-desc {
+            color: var(--gray-500);
+            font-size: 15px;
+            margin-bottom: 24px;
+        }
+        h2 {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--gray-800);
+            margin: 32px 0 16px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--gray-100);
+        }
+        h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--gray-700);
+            margin: 24px 0 12px;
+        }
+        h4 {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--gray-700);
+            margin: 20px 0 10px;
+        }
+        p { margin-bottom: 12px; color: var(--gray-600); }
+        .table-wrapper {
+            overflow-x: auto;
+            border-radius: var(--radius);
+            border: 1px solid var(--gray-200);
+            margin: 16px 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+        th {
+            background: var(--gray-50);
+            padding: 12px 16px;
+            text-align: left;
+            font-weight: 600;
+            color: var(--gray-700);
+            border-bottom: 1px solid var(--gray-200);
+            white-space: nowrap;
+        }
+        td {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--gray-100);
+            color: var(--gray-600);
+            vertical-align: top;
+        }
+        tr:last-child td { border-bottom: none; }
+        tr:hover td { background: var(--gray-50); }
+        pre {
+            background: var(--gray-900);
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: var(--radius);
+            overflow-x: auto;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            line-height: 1.6;
+            margin: 16px 0;
+        }
+        pre code {
+            background: none;
+            padding: 0;
+            color: inherit;
+        }
+        code {
+            background: var(--gray-100);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            color: var(--gray-700);
+        }
+        .method {
+            display: inline-flex;
+            align-items: center;
+            padding: 3px 10px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .method-get { background: var(--success-light); color: var(--success); }
+        .method-post { background: var(--primary-light); color: var(--primary); }
+        .method-put { background: var(--warning-light); color: var(--warning); }
+        .method-delete { background: var(--danger-light); color: var(--danger); }
+        .method-patch { background: var(--purple-light); color: var(--purple); }
+        .unit-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 3px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            font-family: 'JetBrains Mono', monospace;
+            white-space: nowrap;
+        }
+        .unit-read { background: var(--success-light); color: var(--success); }
+        .unit-write { background: var(--primary-light); color: var(--primary); }
+        .unit-bulk { background: var(--warning-light); color: var(--warning); }
+        .unit-heavy { background: var(--purple-light); color: var(--purple); }
+        .unit-premium { background: var(--danger-light); color: var(--danger); }
+        .unit-free { background: var(--gray-100); color: var(--gray-500); }
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
+            margin: 20px 0;
+        }
+        .card {
+            background: var(--gray-50);
+            border: 1px solid var(--gray-200);
+            border-radius: var(--radius);
+            padding: 20px;
+            transition: all 0.2s ease;
+        }
+        .card:hover {
+            border-color: var(--gray-300);
+            box-shadow: var(--shadow-md);
+        }
+        .card-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--gray-800);
+            margin-bottom: 4px;
+        }
+        .card-desc {
+            font-size: 13px;
+            color: var(--gray-500);
+        }
+        .alert {
+            padding: 16px 20px;
+            border-radius: var(--radius);
+            margin: 16px 0;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+        .alert-info {
+            background: var(--primary-light);
+            border: 1px solid #bfdbfe;
+            color: #1e40af;
+        }
+        .alert-warning {
+            background: var(--warning-light);
+            border: 1px solid #fde68a;
+            color: #92400e;
+        }
+        .alert-danger {
+            background: var(--danger-light);
+            border: 1px solid #fecaca;
+            color: #991b1b;
+        }
+        .alert-success {
+            background: var(--success-light);
+            border: 1px solid #a7f3d0;
+            color: #065f46;
+        }
+        .alert-icon {
+            flex-shrink: 0;
+            width: 20px; height: 20px;
+            margin-top: 2px;
+        }
+        .endpoint-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            border-radius: var(--radius);
+            background: var(--gray-50);
+            margin: 8px 0;
+            border: 1px solid var(--gray-200);
+            transition: all 0.15s ease;
+        }
+        .endpoint-row:hover {
+            background: white;
+            border-color: var(--gray-300);
+            box-shadow: var(--shadow-sm);
+        }
+        .endpoint-path {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            color: var(--gray-700);
+            flex: 1;
+            min-width: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .endpoint-desc {
+            font-size: 13px;
+            color: var(--gray-500);
+            flex-shrink: 0;
+        }
+        .pricing-highlight {
+            background: linear-gradient(135deg, var(--primary-light) 0%, #eff6ff 100%);
+            border: 1px solid #bfdbfe;
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            margin: 20px 0;
+        }
+        .pricing-highlight .price {
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--primary);
+            line-height: 1;
+        }
+        .pricing-highlight .price-period {
+            font-size: 16px;
+            color: var(--gray-500);
+            font-weight: 400;
+        }
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-top: 20px;
+        }
+        .pricing-item {
+            text-align: center;
+            padding: 16px;
+            background: white;
+            border-radius: var(--radius);
+        }
+        .pricing-item-value {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--gray-800);
+        }
+        .pricing-item-label {
+            font-size: 12px;
+            color: var(--gray-500);
+            margin-top: 4px;
+        }
+        .scroll-top {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            width: 44px; height: 44px;
+            background: white;
+            border: 1px solid var(--gray-200);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: var(--shadow-lg);
+            transition: all 0.2s ease;
+            z-index: 100;
+        }
+        .scroll-top:hover {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+        }
+        @media (max-width: 1024px) {
+            .main-layout { grid-template-columns: 1fr; }
+            .sidebar { display: none; }
+        }
+        @media (max-width: 640px) {
+            .header h1 { font-size: 28px; }
+            .section { padding: 20px; }
+            .pricing-grid { grid-template-columns: 1fr; }
+        }
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 24px;
+        }
+        @media print {
+            .sidebar, .scroll-top { display: none !important; }
+            .main-layout { grid-template-columns: 1fr; }
+            .section {
+                break-inside: avoid;
+                box-shadow: none;
+                border: 1px solid #ddd;
+            }
+            .header {
+                background: #1e293b !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="header-badge">
+                <span class="dot"></span>
+                Production — Pricing Locked
+            </div>
+            <h1>Imploy Platform API</h1>
+            <p class="header-subtitle">Multi-tenant healthcare management platform for Australian NDIS, HCP & Aged Care providers. 745 metered endpoints across Enterprise, Mobile, and Web surfaces.</p>
+            <div class="header-meta">
+                <div class="header-meta-item">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
+                    Version 1.0
+                </div>
+                <div class="header-meta-item">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                    Last updated: 23 June 2026
+                </div>
+                <div class="header-meta-item">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                    745 Endpoints
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="main-layout">
+            <aside class="sidebar">
+                <div class="sidebar-title">Documentation</div>
+                <ul class="sidebar-nav">
+                    <li><a href="#overview" class="active">1. Platform Overview</a></li>
+                    <li><a href="#auth">2. Authentication</a></li>
+                    <li><a href="#rate-limits">3. Rate Limiting</a></li>
+                    <li><a href="#pricing">4. Pricing & Billing</a></li>
+                    <li><a href="#usage">5. Usage Tracking</a></li>
+                    <li><a href="#enterprise">6. Enterprise API</a>
+                        <ul class="sub-nav">
+                            <li><a href="#enterprise-clients">Clients</a></li>
+                            <li><a href="#enterprise-scheduler">Scheduler</a></li>
+                            <li><a href="#enterprise-invoices">Invoices</a></li>
+                            <li><a href="#enterprise-staff">Staff</a></li>
+                            <li><a href="#enterprise-ndia">NDIA Claims</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#mobile">7. Mobile App API</a>
+                        <ul class="sub-nav">
+                            <li><a href="#mobile-appointments">Appointments</a></li>
+                            <li><a href="#mobile-clients">Clients</a></li>
+                            <li><a href="#mobile-availability">Availability</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#web">8. Web Frontend API</a>
+                        <ul class="sub-nav">
+                            <li><a href="#web-dashboard">Dashboard</a></li>
+                            <li><a href="#web-clients">Client Records</a></li>
+                            <li><a href="#web-roster">Roster</a></li>
+                            <li><a href="#web-finance">Finance</a></li>
+                            <li><a href="#web-reports">Reports</a></li>
+                            <li><a href="#web-ai">AI Features</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#errors">9. Error Reference</a></li>
+                    <li><a href="#bulk">10. Bulk Operations</a></li>
+                </ul>
+            </aside>
+
+            <main class="content">
+
+                <!-- 1. Platform Overview -->
+                <section class="section" id="overview">
+                    <div class="section-title">
+                        <div class="icon">1</div>
+                        Platform Overview
+                    </div>
+                    <p class="section-desc">Three distinct API surfaces serving different consumers, all metered and billed per call.</p>
+
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Surface</th>
+                                    <th>Base URL</th>
+                                    <th>Auth Method</th>
+                                    <th>Primary Consumers</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Enterprise</strong></td>
+                                    <td><code>/api/enterprise/v1/</code></td>
+                                    <td><span class="method method-get">X-API-Key</span></td>
+                                    <td>Third-party integrations, automation</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Mobile App</strong></td>
+                                    <td><code>/api/v1/</code></td>
+                                    <td><span class="method method-post">Sanctum Bearer</span></td>
+                                    <td>iOS / Android staff app</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Web Frontend</strong></td>
+                                    <td><code>/api/web/v1/</code></td>
+                                    <td><span class="method method-post">Sanctum Bearer</span></td>
+                                    <td>React SPA (browser)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h3>Architecture</h3>
+                    <div class="card-grid">
+                        <div class="card">
+                            <div class="card-title">Multi-Tenancy</div>
+                            <div class="card-desc">Each organisation has its own MySQL database. The API layer validates your key, identifies your organisation, and switches the active database connection per request.</div>
+                        </div>
+                        <div class="card">
+                            <div class="card-title">Billing Pipeline</div>
+                            <div class="card-desc">Every successful response triggers a usage event via QueueUsageEvent middleware. Fires after the response is sent (zero latency impact).</div>
+                        </div>
+                        <div class="card">
+                            <div class="card-title">AI Caution Pipeline</div>
+                            <div class="card-desc">Every shift checkout and shift note submission sends notes to Azure OpenAI GPT-5.4. Severity >= 5 triggers ShiftCaution records and care manager notifications.</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 2. Authentication -->
+                <section class="section" id="auth">
+                    <div class="section-title">
+                        <div class="icon">2</div>
+                        Authentication
+                    </div>
+                    <p class="section-desc">Three authentication methods across the three API surfaces.</p>
+
+                    <h3>Enterprise API — API Key</h3>
+                    <p>Every enterprise request must include your API key:</p>
+                    <pre><code>X-API-Key: impl_live_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</code></pre>
+                    <p>Or as a Bearer token:</p>
+                    <pre><code>Authorization: Bearer impl_live_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</code></pre>
+
+                    <div class="alert alert-info">
+                        <svg class="alert-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        <div><strong>Key format:</strong> <code>impl_live_&lt;22-char-prefix&gt;&lt;secret-suffix&gt;</code>. Keys are bcrypt-hashed at rest. The first 22 characters identify the key; the full value is validated on each request and cached for 5 minutes.</div>
+                    </div>
+
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr><th>Status</th><th>Behaviour</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td><span class="unit-badge unit-read">active</span></td><td>Requests proceed normally</td></tr>
+                                <tr><td><span class="unit-badge unit-free">revoked</span></td><td>Returns <code>401 Unauthorized</code></td></tr>
+                                <tr><td><span class="unit-badge unit-free">expired</span></td><td>Returns <code>401 Unauthorized</code></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h3>Mobile App — Sanctum Token</h3>
+                    <p>Staff authenticate via the login endpoint:</p>
+                    <pre><code>POST /api/v1/login
+Content-Type: application/json
+
+{ "email": "worker@example.com", "password": "..." }</code></pre>
+                    <p>Include the returned <code>token</code> on all subsequent requests:</p>
+                    <pre><code>Authorization: Bearer &lt;sanctum-token&gt;</code></pre>
+
+                    <h3>Web Frontend — Sanctum (Cookie/Token)</h3>
+                    <p>The React SPA uses Laravel Sanctum's cookie-based session authentication. The token is stored in memory (not localStorage) and injected into requests by <code>api.ts</code>.</p>
+                </section>
+
+                <!-- 3. Rate Limiting -->
+                <section class="section" id="rate-limits">
+                    <div class="section-title">
+                        <div class="icon">3</div>
+                        Rate Limiting
+                    </div>
+                    <p class="section-desc">Tiered rate limits per API surface. Exceeded limits return <code>429 Too Many Requests</code>.</p>
+
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr><th>Tier</th><th>Limit</th><th>Window</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>Enterprise API</td><td><strong>300</strong> requests</td><td>per minute</td></tr>
+                                <tr><td>Mobile App</td><td><strong>60</strong> requests</td><td>per minute</td></tr>
+                                <tr><td>Web Frontend</td><td><strong>60</strong> requests</td><td>per minute</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h4>Response Headers</h4>
+                    <pre><code>X-RateLimit-Limit: 300
+X-RateLimit-Remaining: 241
+Retry-After: 34        (only present on 429)</code></pre>
+
+                    <div class="alert alert-warning">
+                        <svg class="alert-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                        <div>When exceeded, the API returns: <code>{ "message": "Too Many Attempts." }</code> — <strong>not billed</strong> (0 units).</div>
+                    </div>
+                </section>
+
+                <!-- 4. Pricing & Billing -->
+                <section class="section" id="pricing">
+                    <div class="section-title">
+                        <div class="icon">4</div>
+                        Pricing & Billing Model
+                    </div>
+                    <p class="section-desc">Pay-per-call model with a monthly base fee and overage charges.</p>
+
+                    <div class="pricing-highlight">
+                        <div style="display:flex; align-items:baseline; gap:8px; margin-bottom:4px;">
+                            <span class="price">$1,900</span>
+                            <span class="price-period">AUD / month</span>
+                        </div>
+                        <p style="color:#1e40af; margin:0;">Enterprise Monthly Plan — includes 400,000 units</p>
+                        <div class="pricing-grid">
+                            <div class="pricing-item">
+                                <div class="pricing-item-value">400,000</div>
+                                <div class="pricing-item-label">Included Units</div>
+                            </div>
+                            <div class="pricing-item">
+                                <div class="pricing-item-value">$7.50</div>
+                                <div class="pricing-item-label">Per 1,000 Overage Units</div>
+                            </div>
+                            <div class="pricing-item">
+                                <div class="pricing-item-value">$0.0075</div>
+                                <div class="pricing-item-label">Per Unit Overage</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h3>Unit Weights</h3>
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr><th>Category</th><th>Units</th><th>Cost/call</th><th>Trigger</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td><span class="unit-badge unit-read">Read</span></td><td>2</td><td>$0.015</td><td>Any <code>GET</code> request</td></tr>
+                                <tr><td><span class="unit-badge unit-write">Write</span></td><td>8</td><td>$0.060</td><td>Any <code>POST/PUT/DELETE/PATCH</code></td></tr>
+                                <tr><td><span class="unit-badge unit-bulk">Bulk flat</span></td><td>25</td><td>$0.1875</td><td>Bulk endpoint, no item count</td></tr>
+                                <tr><td><span class="unit-badge unit-bulk">Bulk per-item</span></td><td>max(25, N)</td><td>$0.1875+</td><td>Bulk endpoint, N = items</td></tr>
+                                <tr><td><span class="unit-badge unit-heavy">Heavy flat</span></td><td>35</td><td>$0.2625</td><td>Reports, exports, aggregations</td></tr>
+                                <tr><td><span class="unit-badge unit-heavy">Heavy-bulk per-item</span></td><td>max(35, N)</td><td>$0.2625+</td><td>Heavy + item count</td></tr>
+                                <tr><td><span class="unit-badge unit-premium">Premium</span></td><td>60</td><td>$0.4500</td><td>AI, external sync, checkout, SMS</td></tr>
+                                <tr><td><span class="unit-badge unit-free">Error</span></td><td>0</td><td>$0.00</td><td>Any <code>4xx/5xx</code> — never billed</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h3>Billing Examples Per Call</h3>
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr><th>Request</th><th>Description</th><th>Units</th><th>Cost</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td><span class="method method-get">GET</span> <code>/client-records</code></td><td>List clients</td><td><span class="unit-badge unit-read">2</span></td><td>$0.015</td></tr>
+                                <tr><td><span class="method method-post">POST</span> <code>/client-record/step1</code></td><td>Create client</td><td><span class="unit-badge unit-write">8</span></td><td>$0.060</td></tr>
+                                <tr><td><span class="method method-post">POST</span> <code>/scheduler/publish</code></td><td>Publish 5 shifts</td><td><span class="unit-badge unit-bulk">25</span></td><td>$0.1875</td></tr>
+                                <tr><td><span class="method method-post">POST</span> <code>/scheduler/publish</code></td><td>Publish 50 shifts</td><td><span class="unit-badge unit-bulk">50</span></td><td>$0.375</td></tr>
+                                <tr><td><span class="method method-post">POST</span> <code>/scheduler/publish</code></td><td>Publish 200 shifts</td><td><span class="unit-badge unit-bulk">200</span></td><td>$1.500</td></tr>
+                                <tr><td><span class="method method-get">GET</span> <code>/reports/all-clients</code></td><td>Export report</td><td><span class="unit-badge unit-heavy">35</span></td><td>$0.2625</td></tr>
+                                <tr><td><span class="method method-post">POST</span> <code>/appointment/checkout</code></td><td>Clock out (AI + billable)</td><td><span class="unit-badge unit-premium">60</span></td><td>$0.450</td></tr>
+                                <tr><td><span class="method method-post">POST</span> <code>/xero/sync</code></td><td>Xero sync</td><td><span class="unit-badge unit-premium">60</span></td><td>$0.450</td></tr>
+                                <tr><td>Any <code>4xx</code> or <code>5xx</code></td><td>Error response</td><td><span class="unit-badge unit-free">0</span></td><td>$0.00</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h3>Monthly Cost by Organisation Size</h3>
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr><th>Workers</th><th>Est. Units/Month</th><th>Overage</th><th>Monthly Total</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>&le; 100</td><td>~80,000</td><td>0</td><td><strong>$1,900</strong></td></tr>
+                                <tr><td>200</td><td>~160,000</td><td>0</td><td><strong>$1,900</strong></td></tr>
+                                <tr><td>500</td><td>~400,000</td><td>0</td><td><strong>$1,900</strong></td></tr>
+                                <tr><td>700</td><td>~560,000</td><td>160,000</td><td><strong>$3,100</strong></td></tr>
+                                <tr><td>1,000</td><td>~850,000</td><td>450,000</td><td><strong>$5,275</strong></td></tr>
+                                <tr><td>2,000</td><td>~1,700,000</td><td>1,300,000</td><td><strong>$11,650</strong></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <p style="font-size:13px; color:var(--gray-500);"><em>Estimates assume ~800 units/worker/month (200 reads + 50 writes + 16 shift completions).</em></p>
+                </section>
+
+                <!-- 5. Usage Tracking -->
+                <section class="section" id="usage">
+                    <div class="section-title">
+                        <div class="icon">5</div>
+                        Usage Tracking
+                    </div>
+                    <p class="section-desc">Every API call is tracked, calculated, and reported to Stripe for billing.</p>
+
+                    <h3>How It Works</h3>
+                    <ol style="margin:16px 0; padding-left:24px; color:var(--gray-600);">
+                        <li>Reads <code>bulk_item_count</code> from request attributes (set by controllers on bulk endpoints)</li>
+                        <li>POSTs a usage event to the API management server at <code>http://127.0.0.1:8083/api/internal/usage-event</code></li>
+                        <li>API management server queues a <code>ProcessUsageEvent</code> job on the <code>api-usage</code> queue</li>
+                        <li><code>UnitCalculatorService::calculate()</code> determines units based on endpoint, method, status code, and item count</li>
+                        <li>Event stored in <code>api_usage_events</code> with <code>units</code>, <code>category</code>, <code>reason</code>, <code>duration_ms</code></li>
+                        <li>If units > 0, a <code>SendStripeUsageEvent</code> job reports to Stripe for billing</li>
+                    </ol>
+
+                    <h3>Usage Event Record</h3>
+                    <pre><code>{
+  "customer_id": 1,
+  "endpoint": "/api/web/v1/scheduler/publish",
+  "method": "POST",
+  "status_code": 200,
+  "units": 50,
+  "weight_category": "bulk",
+  "duration_ms": 142,
+  "metadata": {
+    "ip": "203.0.113.5",
+    "user_agent": "Mozilla/5.0 ...",
+    "bulk_item_count": 50,
+    "endpoint_category": "scheduler",
+    "reason": "bulk_per_item"
+  }
+}</code></pre>
+
+                    <h3>Checking Your Usage</h3>
+                    <p>All usage endpoints require <code>X-App-ID</code> header or <code>?app_id=</code> query parameter.</p>
+                    <div class="endpoint-row">
+                        <span class="method method-get">GET</span>
+                        <span class="endpoint-path">/api/v1/usage/current</span>
+                        <span class="endpoint-desc">Current period usage</span>
+                    </div>
+                    <div class="endpoint-row">
+                        <span class="method method-get">GET</span>
+                        <span class="endpoint-path">/api/v1/usage/history?days=30</span>
+                        <span class="endpoint-desc">Historical usage</span>
+                    </div>
+                    <div class="endpoint-row">
+                        <span class="method method-get">GET</span>
+                        <span class="endpoint-path">/api/v1/usage/breakdown</span>
+                        <span class="endpoint-desc">Category breakdown</span>
+                    </div>
+                    <div class="endpoint-row">
+                        <span class="method method-get">GET</span>
+                        <span class="endpoint-path">/api/v1/usage/top-endpoints?limit=10</span>
+                        <span class="endpoint-desc">Top endpoints</span>
+                    </div>
+                    <div class="endpoint-row">
+                        <span class="method method-get">GET</span>
+                        <span class="endpoint-path">/api/v1/usage/predictions</span>
+                        <span class="endpoint-desc">Usage predictions</span>
+                    </div>
+                </section>
+
+                <!-- 6. Enterprise API -->
+                <section class="section" id="enterprise">
+                    <div class="section-title">
+                        <div class="icon">6</div>
+                        Enterprise API
+                    </div>
+                    <p class="section-desc"><strong>Base URL:</strong> <code>https://app.imploy.com.au/api/enterprise/v1</code> &nbsp;|&nbsp; <strong>Auth:</strong> <code>X-API-Key: impl_live_...</code></p>
+
+                    <h2 id="enterprise-clients">6.1 Clients</h2>
+                    <div class="endpoint-row">
+                        <span class="method method-get">GET</span>
+                        <span class="endpoint-path">/clients</span>
+                        <span class="unit-badge unit-read">2</span>
+                        <span class="endpoint-desc">List clients</span>
+                    </div>
+                    <div class="endpoint-row">
+                        <span class="method method-get">GET</span>
+                        <span class="endpoint-path">/clients/{id}</span>
+                        <span class="unit-badge unit-read">2</span>
+                        <span class="endpoint-desc">Get client</span>
+                    </div>
+                    <div class="endpoint-row">
+                        <span class="method method-get">GET</span>
+                        <span class="endpoint-path">/clients/{id}/budget</span>
+                        <span class="unit-badge unit-read">2</span>
+                        <span class="endpoint-desc">Get client budget</span>
+                    </div>
+                    <div class="endpoint-row">
+                        <span class="method method-get">GET</span>
+                        <span class="endpoint-path">/clients/{id}/overview</span>
+                        <span class="unit-badge unit-read">2</span>
+                        <span class="endpoint-desc">Get client overview</span>
+                    </div>
+                    <div class="endpoint-row">
+                        <span class="method method-post">POST</span>
+                        <span class="endpoint-path">/clients/bulk-create</span>
+                        <span class="unit-badge unit-bulk">max(25,N)</span>
+                        <span class="endpoint-desc">Bulk create clients (max 500)</span>
+                    </div>
+
+                    <h4>Bulk Create Clients Payload</h4>
+                    <pre><code>{
+  "items": [
+    {
+      "first_name": "Jane",
+      "last_name": "Smith",
+      "client_type": "NDIS",
+      "language": "English",
+      "status": "Active",
+      "business_id": 1,
+      "date_of_birth": "1985-03-15",
+      "gender": "Female",
+      "address": "12 Example St, Sydney NSW 2000"
+    }
+  ]
+}</code></pre>
+
+                    <h2 id="enterprise-scheduler">6.2 Scheduler / Shifts</h2>
+                    <div class="endpoint-row">
+                        <span class="method method-get">GET</span>
+                        <span class="endpoint-path">/scheduler</span>
+                        <span class="unit-badge unit-read">2</span>
+                        <span class="endpoint-desc">List shifts</span>
+                    </div>
+                    <div class="endpoint-row">
+                        <span class="method method-post">POST</span>
+                        <span class="endpoint-path">/scheduler</span>
+                        <span class="unit-badge unit-write">8</span>
+                        <span class="endpoint-desc">Create shift</span>
+                    </div>
+                    <div class="endpoint-row">
+                        <span class="method method-put">PUT</span>
+                        <span class="endpoint-path">/scheduler/{id}</span>
+                        <span class="unit-badge unit-write">8</span>
+                        <span class="endpoint-desc">Update shift</span>
+                    </div>
+                    <div class="endpoint-row">
+                        <span class="method method-delete">DELETE</span>
+                        <span class="endpoint-path">/scheduler/{id}</span>
+                        <span class="unit-badge unit-write">8</span>
+                        <span class="endpoint-desc">Delete shift</span>
+                    </div>
+                    <div class="endpoint-row">
+                        <span class="method method-post">POST</span>
+                        <span class="endpoint-path">/scheduler/bulk-create</span>
+                        <span class="unit-badge unit-bulk">max(25,N)</span>
+                        <span class="endpoint-desc">Bulk create shifts</span>
+                    </div>
+                    <div class="endpoint-row">
+                        <span class="method method-put">PUT</span>
+                        <span class="endpoint-path">/scheduler/bulk-update-status</span>
+                        <span class="unit-badge unit-bulk">max(25,N)</span>
+                        <span class="endpoint-desc">Bulk update shift status</span>
+                    </div>
+                    <div class="endpoint-row">
+                        <span class="method method-post">POST</span>
+                        <span class="endpoint-path">/scheduler/bulk-checkin</span>
+                        <span class="unit-badge unit-bulk">max(25,N)</span>
+                        <span class="endpoint-desc">Bulk clock in</span>
+                    </div>
+                    <div class="endpoint-row">
+                        <span class="method method-post">POST</span>
+                        <span class="endpoint-path">/scheduler/bulk-checkout</span>
+                        <span class="unit-badge unit-bulk">max(25,N)</span>
+                        <span class="endpoint-desc">Bulk clock out</span>
+                    </div>
+
+                    <h3>6.3 Mobile Shift View</h3>
+                    <div class="endpoint-row">
+                        <span class="method method-get">GET</span>
+                        <span class="endpoint-path">/shifts?employee_id=3&status=upcoming</span>
+                        <span class="unit-badge unit-read">2</span>
+                        <span class="endpoint-desc">Get shifts for worker</span>
+                    </div>
+
+                    <h2 id="enterprise-invoices">6.4 Invoices</h2>
+                    <div class="endpoint-row">
+                        <span class="method method-get">GET</span>
+                        <span class="endpoint-path">/invoices</span>
+                        <span class="unit-badge unit-read">2</span>
+                        <span class="endpoint-desc">List invoices</span>
+                    </div>
+                    <div class="endpoint-row">
+                        <span class="method method-post">POST</span>
+                        <span class="endpoint-path">/invoices/bulk-create</span>
+                        <span class="unit-badge unit-bulk">max(25,N)</span>
+                        <span class="endpoint-desc">Bulk create invoices</span>
+                    </div>
+
+                    <h3>6.5 Billable Entries</h3>
+                    <div class="endpoint-row">
+                        <span class="method method-post">POST</span>
+                        <span class="endpoint-path">/billable-entries/bulk-create</span>
+                        <span class="unit-badge unit-bulk">max(25,N)</span>
+                        <span class="endpoint-desc">Bulk create billable entries</span>
+                    </div>
+
+                    <h2 id="enterprise-staff">6.6 Staff</h2>
+                    <div class="endpoint-row">
+                        <span class="method method-get">GET</span>
+                        <span class="endpoint-path">/staff</span>
+                        <span class="unit-badge unit-read">2</span>
+                        <span class="endpoint-desc">List staff</span>
+                    </div>
+                    <div class="endpoint-row">
+                        <span class="method method-get">GET</span>
+                        <span class="endpoint-path">/staff/{id}</span>
+                        <span class="unit-badge unit-read">2</span>
+                        <span class="endpoint-desc">Get staff member</span>
+                    </div>
+
+                    <h3>6.7 Timesheets</h3>
+                    <div class="endpoint-row">
+                        <span class="method method-get">GET</span>
+                        <span class="endpoint-path">/timesheets</span>
+                        <span class="unit-badge unit-read">2</span>
+                        <span class="endpoint-desc">List timesheets</span>
+                    </div>
+                    <div class="endpoint-row">
+                        <span class="method method-put">PUT</span>
+                        <span class="endpoint-path">/timesheets/{id}</span>
+                        <span class="unit-badge unit-write">8</span>
+                        <span class="endpoint-desc">Update timesheet shift</span>
+                    </div>
+
+                    <h2 id="enterprise-ndia">6.8 NDIA Claims</h2>
+                    <div class="endpoint-row">
+                        <span class="method method-get">GET</span>
+                        <span class="endpoint-path">/ndia-claims</span>
+                        <span class="unit-badge unit-read">2</span>
+                        <span class="endpoint-desc">List NDIA claims</span>
+                    </div>
+                    <div class="endpoint-row">
+                        <span class="method method-post">POST</span>
+                        <span class="endpoint-path">/ndia-claims</span>
+                        <span class="unit-badge unit-write">8</span>
+                        <span class="endpoint-desc">Create NDIA claim</span>
+                    </div>
+                </section>
+
+                <!-- 7. Mobile App API -->
+                <section class="section" id="mobile">
+                    <div class="section-title">
+                        <div class="icon">7</div>
+                        Mobile App API
+                    </div>
+                    <p class="section-desc"><strong>Base URL:</strong> <code>https://app.imploy.com.au/api/v1</code> &nbsp;|&nbsp; <strong>Auth:</strong> <code>Authorization: Bearer &lt;sanctum-token&gt;</code></p>
+
+                    <h2 id="mobile-appointments">7.1 Appointments / Shifts</h2>
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr><th>Method</th><th>Endpoint</th><th>Description</th><th>Units</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/appointments</code></td><td>This worker's upcoming appointments</td><td><span class="unit-badge unit-read">2</span></td></tr>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/monthwiseshift</code></td><td>Appointments grouped by month</td><td><span class="unit-badge unit-read">2</span></td></tr>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/weeklyhours</code></td><td>Hours worked this week</td><td><span class="unit-badge unit-read">2</span></td></tr>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/shift-pool</code></td><td>Available unassigned shifts</td><td><span class="unit-badge unit-read">2</span></td></tr>
+                                <tr><td><span class="method method-post">POST</span></td><td><code>/acceptshift</code></td><td>Accept a shift from pool</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                                <tr><td><span class="method method-post">POST</span></td><td><code>/declineshift</code></td><td>Decline a shift</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                                <tr><td><span class="method method-post">POST</span></td><td><code>/appointment/checkin</code></td><td>Clock in to a shift</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                                <tr><td><span class="method method-post">POST</span></td><td><code>/appointment/checkout</code></td><td><strong>Clock out — AI caution analysis + billable entry + budget deduction</strong></td><td><span class="unit-badge unit-premium">60</span></td></tr>
+                                <tr><td><span class="method method-post">POST</span></td><td><code>/appointment/shiftnote</code></td><td><strong>Submit shift note — AI caution analysis</strong></td><td><span class="unit-badge unit-premium">60</span></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h4>Checkout Payload</h4>
+                    <pre><code>{
+  "appointment_id": 101,
+  "shift_notes": "Client was in good spirits. Medication administered on time. No concerns.",
+  "time": "2026-07-07T11:05:00",
+  "kms_travelled": 12.4
+}</code></pre>
+
+                    <div class="alert alert-info">
+                        <svg class="alert-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        <div><strong>What happens on checkout:</strong> (1) Checkout time recorded, (2) Shift notes saved, (3) Azure OpenAI GPT-5.4 analyses for safety concerns, (4) ShiftCaution records created for severity >= 5, (5) Care managers notified, (6) ClientBillableEntryService auto-created, (7) Budget deduction applied, (8) Travel claim auto-created if consecutive appointments detected.</div>
+                    </div>
+
+                    <h2 id="mobile-clients">7.2 Clients</h2>
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr><th>Method</th><th>Endpoint</th><th>Description</th><th>Units</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/clients</code></td><td>Clients assigned to this worker</td><td><span class="unit-badge unit-read">2</span></td></tr>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/client/{id}</code></td><td>Client profile</td><td><span class="unit-badge unit-read">2</span></td></tr>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/client/photo/{id}</code></td><td>Client profile photo</td><td><span class="unit-badge unit-read">2</span></td></tr>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/client/shiftnote/{id}</code></td><td>Specific shift note</td><td><span class="unit-badge unit-read">2</span></td></tr>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/client/shiftnote/photo/{appointmentId}/{noteId}</code></td><td>Photo from shift note</td><td><span class="unit-badge unit-read">2</span></td></tr>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/client/careplanfile/{id}</code></td><td>Download care plan file</td><td><span class="unit-badge unit-read">2</span></td></tr>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/careplan/{id}</code></td><td>Care plan for a client</td><td><span class="unit-badge unit-read">2</span></td></tr>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/assessments/{id}</code></td><td>Client assessments</td><td><span class="unit-badge unit-read">2</span></td></tr>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/general-documents/{id}</code></td><td>Client general documents</td><td><span class="unit-badge unit-read">2</span></td></tr>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/get-assessment/file/{id}</code></td><td>Download assessment file</td><td><span class="unit-badge unit-read">2</span></td></tr>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/get-general-document/file/{id}</code></td><td>Download general document</td><td><span class="unit-badge unit-read">2</span></td></tr>
+                                <tr><td><span class="method method-post">POST</span></td><td><code>/client-incident</code></td><td>Report a client incident</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h2 id="mobile-availability">7.3 Availability</h2>
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr><th>Method</th><th>Endpoint</th><th>Description</th><th>Units</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/availability</code></td><td>This worker's availability</td><td><span class="unit-badge unit-read">2</span></td></tr>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/defaultavailability</code></td><td>Default availability settings</td><td><span class="unit-badge unit-read">2</span></td></tr>
+                                <tr><td><span class="method method-post">POST</span></td><td><code>/availability/store</code></td><td>Save / update availability</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                                <tr><td><span class="method method-post">POST</span></td><td><code>/availability/check</code></td><td>Check availability for a date/range</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h3>7.4 Leave</h3>
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr><th>Method</th><th>Endpoint</th><th>Description</th><th>Units</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/leaves</code></td><td>This worker's leave requests</td><td><span class="unit-badge unit-read">2</span></td></tr>
+                                <tr><td><span class="method method-post">POST</span></td><td><code>/leave/store</code></td><td>Submit a leave request</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                                <tr><td><span class="method method-post">POST</span></td><td><code>/leave/update/{id}</code></td><td>Update a leave request</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                                <tr><td><span class="method method-post">POST</span></td><td><code>/leave/check</code></td><td>Check leave balance / conflicts</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h3>7.5 Notifications</h3>
+                    <div class="endpoint-row">
+                        <span class="method method-get">GET</span>
+                        <span class="endpoint-path">/notifications</span>
+                        <span class="unit-badge unit-read">2</span>
+                        <span class="endpoint-desc">Notifications for this worker</span>
+                    </div>
+
+                    <h3>7.6 Payslips</h3>
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr><th>Method</th><th>Endpoint</th><th>Description</th><th>Units</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/payslips</code></td><td>List payslips</td><td><span class="unit-badge unit-read">2</span></td></tr>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/payslip/{id}</code></td><td>Get a specific payslip</td><td><span class="unit-badge unit-read">2</span></td></tr>
+                                <tr><td><span class="method method-delete">DELETE</span></td><td><code>/payslip/X7u9R/{filename}</code></td><td>Delete a payslip file</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h3>7.7 Travel Claims</h3>
+                    <div class="endpoint-row">
+                        <span class="method method-get">GET</span>
+                        <span class="endpoint-path">/travel-claims</span>
+                        <span class="unit-badge unit-read">2</span>
+                        <span class="endpoint-desc">List travel claims</span>
+                    </div>
+
+                    <h3>7.8 Documents</h3>
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr><th>Method</th><th>Endpoint</th><th>Description</th><th>Units</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/user/document/list</code></td><td>List worker's documents</td><td><span class="unit-badge unit-read">2</span></td></tr>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/user/documents</code></td><td>All worker documents</td><td><span class="unit-badge unit-read">2</span></td></tr>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/user/getdocument/{id}</code></td><td>Download a specific document</td><td><span class="unit-badge unit-read">2</span></td></tr>
+                                <tr><td><span class="method method-post">POST</span></td><td><code>/user/document/upload</code></td><td>Upload compliance or HR document</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                                <tr><td><span class="method method-delete">DELETE</span></td><td><code>/user/document/delete/{id}</code></td><td>Delete a document</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h3>7.9 User Account</h3>
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr><th>Method</th><th>Endpoint</th><th>Description</th><th>Units</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/user</code></td><td>Current worker's profile</td><td><span class="unit-badge unit-read">2</span></td></tr>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/user/photo</code></td><td>Profile photo</td><td><span class="unit-badge unit-read">2</span></td></tr>
+                                <tr><td><span class="method method-post">POST</span></td><td><code>/user/update</code></td><td>Update profile</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                                <tr><td><span class="method method-post">POST</span></td><td><code>/change/password</code></td><td>Change password</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                                <tr><td><span class="method method-post">POST</span></td><td><code>/otp/send</code></td><td>Send 2FA OTP</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                                <tr><td><span class="method method-post">POST</span></td><td><code>/otp/turnon</code></td><td>Enable two-factor auth</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                                <tr><td><span class="method method-post">POST</span></td><td><code>/otp/turnoff</code></td><td>Disable two-factor auth</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                                <tr><td><span class="method method-post">POST</span></td><td><code>/logout</code></td><td>Log out (invalidate token)</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h3>7.10 Site Appointments (SIL / Group Home)</h3>
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr><th>Method</th><th>Endpoint</th><th>Description</th><th>Units</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/site/appointments</code></td><td>List site appointments</td><td><span class="unit-badge unit-read">2</span></td></tr>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/site/shift-pool</code></td><td>Site shift pool</td><td><span class="unit-badge unit-read">2</span></td></tr>
+                                <tr><td><span class="method method-post">POST</span></td><td><code>/site/acceptshift</code></td><td>Accept a site shift</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                                <tr><td><span class="method method-post">POST</span></td><td><code>/site/declineshift</code></td><td>Decline a site shift</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                                <tr><td><span class="method method-post">POST</span></td><td><code>/site/appointment/checkin</code></td><td>Clock in to a site shift</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                                <tr><td><span class="method method-post">POST</span></td><td><code>/site/appointment/checkout</code></td><td><strong>Clock out — AI + split billable per client</strong></td><td><span class="unit-badge unit-premium">60</span></td></tr>
+                                <tr><td><span class="method method-post">POST</span></td><td><code>/site/appointment/shiftnote</code></td><td><strong>Submit site shift note — AI caution analysis</strong></td><td><span class="unit-badge unit-premium">60</span></td></tr>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/site/appointment/photo/{appointmentId}/{noteId}</code></td><td>Photo from site shift note</td><td><span class="unit-badge unit-read">2</span></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- 8. Web Frontend API -->
+                <section class="section" id="web">
+                    <div class="section-title">
+                        <div class="icon">8</div>
+                        Web Frontend API
+                    </div>
+                    <p class="section-desc"><strong>Base URL:</strong> <code>https://app.imploy.com.au/api/web/v1</code> &nbsp;|&nbsp; <strong>Auth:</strong> Sanctum cookie session or Bearer token</p>
+
+                    <h2 id="web-dashboard">8.1 Dashboard</h2>
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr><th>Method</th><th>Endpoint</th><th>Description</th><th>Units</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/dashboard</code></td><td>KPIs, upcoming shifts</td><td><span class="unit-badge unit-read">2</span></td></tr>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/dashboard/weekly-data</code></td><td>Weekly activity summary</td><td><span class="unit-badge unit-read">2</span></td></tr>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/dashboard/shift-caution-overview</code></td><td>AI-flagged shift caution feed</td><td><span class="unit-badge unit-read">2</span></td></tr>
+                                <tr><td><span class="method method-post">POST</span></td><td><code>/dashboard/onboarding-settings</code></td><td>Save onboarding preferences</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/global-search</code></td><td>Search clients, staff, sites</td><td><span class="unit-badge unit-read">2</span></td></tr>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/global-document/{type}/{id}/{download?}</code></td><td>Download any document</td><td><span class="unit-badge unit-read">2</span></td></tr>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/intercom-token</code></td><td>Intercom auth token</td><td><span class="unit-badge unit-read">2</span></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h2 id="web-clients">8.2 Client Records</h2>
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr><th>Method</th><th>Endpoint</th><th>Description</th><th>Units</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/client-records</code></td><td>List all clients</td><td><span class="unit-badge unit-read">2</span></td></tr>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/client-records/{type}</code></td><td>Clients by type (NDIS, HCP, etc.)</td><td><span class="unit-badge unit-read">2</span></td></tr>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/client-record/create</code></td><td>Create form scaffold</td><td><span class="unit-badge unit-read">2</span></td></tr>
+                                <tr><td><span class="method method-post">POST</span></td><td><code>/client-record/step1</code></td><td>Create client — basic info</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                                <tr><td><span class="method method-put">PUT</span></td><td><code>/client-record/step2/{id}</code></td><td>Update — contact info</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/client-record/step3/{id}</code></td><td>Get step 3 form</td><td><span class="unit-badge unit-read">2</span></td></tr>
+                                <tr><td><span class="method method-put">PUT</span></td><td><code>/client-record/step3/{id}</code></td><td>Update — funding details</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                                <tr><td><span class="method method-put">PUT</span></td><td><code>/client-record/step4/{id}</code></td><td>Update — compliance</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/client-record/{id}/overview</code></td><td>Client overview</td><td><span class="unit-badge unit-read">2</span></td></tr>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/client-record/{id}/details</code></td><td>Client detail / about tab</td><td><span class="unit-badge unit-read">2</span></td></tr>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/client-record/{id}/notes</code></td><td>Client notes tab</td><td><span class="unit-badge unit-read">2</span></td></tr>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/client-record/{id}/rosters</code></td><td>Client shift history</td><td><span class="unit-badge unit-read">2</span></td></tr>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/client-record/{id}/budgets</code></td><td>Client budget summary</td><td><span class="unit-badge unit-read">2</span></td></tr>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/client-record/{id}/care-plans</code></td><td>Client care plans</td><td><span class="unit-badge unit-read">2</span></td></tr>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/client-record/{id}/assessment-documents</code></td><td>Assessment documents</td><td><span class="unit-badge unit-read">2</span></td></tr>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/client-record/{id}/general-documents</code></td><td>General documents</td><td><span class="unit-badge unit-read">2</span></td></tr>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/client-record/{id}/secure-documents</code></td><td>Secure documents</td><td><span class="unit-badge unit-read">2</span></td></tr>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/client-record/{id}/documents</code></td><td>All documents</td><td><span class="unit-badge unit-read">2</span></td></tr>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/client-record/{id}/billable-entries</code></td><td>Billable entries</td><td><span class="unit-badge unit-read">2</span></td></tr>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/client-record/{id}/connections</code></td><td>Contacts and health professionals</td><td><span class="unit-badge unit-read">2</span></td></tr>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/client-record/{id}/financial</code></td><td>Financial summary</td><td><span class="unit-badge unit-read">2</span></td></tr>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/client-record/{id}/ndis/care-plans</code></td><td>NDIS care plans</td><td><span class="unit-badge unit-read">2</span></td></tr>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/client-record/{id}/tasks</code></td><td>Client tasks</td><td><span class="unit-badge unit-read">2</span></td></tr>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/client-record/{id}/summary-counts</code></td><td>Document / incident counts</td><td><span class="unit-badge unit-read">2</span></td></tr>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/client-record/{id}/overwatch</code></td><td><strong>AI shift caution feed</strong></td><td><span class="unit-badge unit-read">2</span></td></tr>
+                                <tr><td><span class="method method-put">PUT</span></td><td><code>/client-record/{id}/profile</code></td><td>Update client profile</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                                <tr><td><span class="method method-put">PUT</span></td><td><code>/client-record/{id}/custom-fields</code></td><td>Update custom fields</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                                <tr><td><span class="method method-put">PUT</span></td><td><code>/client-records/ndis-funding-details/{id}</code></td><td>Update NDIS funding</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h3>8.3 Client Detail Tabs</h3>
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr><th>Method</th><th>Endpoint</th><th>Description</th><th>Units</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td><span class="method method-put">PUT</span></td><td><code>/client-record/account-info/{id}</code></td><td>Update account info</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                                <tr><td><span class="method method-put">PUT</span></td><td><code>/client-record/general-info/{id}</code></td><td>Update general info</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                                <tr><td><span class="method method-put">PUT</span></td><td><code>/client-record/contact-info/{id}</code></td><td>Update contact info</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                                <tr><td><span class="method method-put">PUT</span></td><td><code>/client-record/allergies/{id}</code></td><td>Update allergies</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                                <tr><td><span class="method method-put">PUT</span></td><td><code>/client-record/funding-details/{id}</code></td><td>Update HCP/private funding</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                                <tr><td><span class="method method-put">PUT</span></td><td><code>/client-record/private-funding-details/{id}</code></td><td>Update private funding</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                                <tr><td><span class="method method-put">PUT</span></td><td><code>/client-record/compliance-requirements/{id}</code></td><td>Update compliance requirements</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                                <tr><td><span class="method method-put">PUT</span></td><td><code>/client-record/staff-preference/{id}</code></td><td>Preferred / excluded staff</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                                <tr><td><span class="method method-put">PUT</span></td><td><code>/client-record/exclude-user/{id}</code></td><td>Exclude a staff member</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                                <tr><td><span class="method method-put">PUT</span></td><td><code>/client-record/team-allocation/{id}</code></td><td>Team allocation</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                                <tr><td><span class="method method-put">PUT</span></td><td><code>/client-record/shift-notes-template/{id}</code></td><td>Set shift notes template</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                                <tr><td><span class="method method-put">PUT</span></td><td><code>/client-record/client-notes/{id}</code></td><td>Client notes setting</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                                <tr><td><span class="method method-post">POST</span></td><td><code>/client-record/check-staff-compliance</code></td><td>Check staff compliance requirements</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                                <tr><td><span class="method method-post">POST</span></td><td><code>/client-record/client-note</code></td><td>Add a client note</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                                <tr><td><span class="method method-put">PUT</span></td><td><code>/client-record/client-note/update/{id}</code></td><td>Update a note</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                                <tr><td><span class="method method-delete">DELETE</span></td><td><code>/client-record/note/delete/{id}</code></td><td>Delete a note</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                                <tr><td><span class="method method-post">POST</span></td><td><code>/client-record/activity</code></td><td>Log an activity</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/client-record/notes-activity/file/{id}</code></td><td>Download file from notes</td><td><span class="unit-badge unit-read">2</span></td></tr>
+                                <tr><td><span class="method method-post">POST</span></td><td><code>/client-record/shiftnote/store</code></td><td>Store a shift note</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                                <tr><td><span class="method method-post">POST</span></td><td><code>/client-record/shiftnote/simplify</code></td><td><strong>AI simplify shift note</strong></td><td><span class="unit-badge unit-premium">60</span></td></tr>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/client-record/shiftnote/photo/{appointmentId}/{noteId}</code></td><td>Shift note photo</td><td><span class="unit-badge unit-read">2</span></td></tr>
+                                <tr><td><span class="method method-delete">DELETE</span></td><td><code>/client-record/shiftnote/delete/{id}</code></td><td>Delete shift note</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                                <tr><td><span class="method method-delete">DELETE</span></td><td><code>/client-record/ai-shift-caution/delete/{id}</code></td><td>Dismiss AI shift caution</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                                <tr><td><span class="method method-put">PUT</span></td><td><code>/client-record/shift-note/visibility/{id}</code></td><td>Toggle note visibility</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                                <tr><td><span class="method method-post">POST</span></td><td><code>/client-record/ai-notes</code></td><td><strong>Generate AI notes</strong></td><td><span class="unit-badge unit-premium">60</span></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h3>8.4 Client Documents</h3>
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr><th>Method</th><th>Endpoint</th><th>Description</th><th>Units</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td><span class="method method-post">POST</span></td><td><code>/client/assessment-document/store</code></td><td>Upload assessment document</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                                <tr><td><span class="method method-post">POST</span></td><td><code>/client/assessment-document/store-from-form</code></td><td>Create from form</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                                <tr><td><span class="method method-put">PUT</span></td><td><code>/client/assessment-document/update/{id}</code></td><td>Update</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/client/assessment-document/{id}</code></td><td>Get</td><td><span class="unit-badge unit-read">2</span></td></tr>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/client/assessment-document/{id}/download</code></td><td>Download</td><td><span class="unit-badge unit-read">2</span></td></tr>
+                                <tr><td><span class="method method-delete">DELETE</span></td><td><code>/client/assessment-document/delete/{id}</code></td><td>Delete</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                                <tr><td><span class="method method-post">POST</span></td><td><code>/client/general-document/store</code></td><td>Upload general document</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                                <tr><td><span class="method method-post">POST</span></td><td><code>/client/general-document/store-from-form</code></td><td>Create from form</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                                <tr><td><span class="method method-put">PUT</span></td><td><code>/client/general-document/update/{id}</code></td><td>Update</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/client/general-document/{id}</code></td><td>Get</td><td><span class="unit-badge unit-read">2</span></td></tr>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/client/general-document/{id}/download</code></td><td>Download</td><td><span class="unit-badge unit-read">2</span></td></tr>
+                                <tr><td><span class="method method-delete">DELETE</span></td><td><code>/client/general-document/delete/{id}</code></td><td>Delete</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                                <tr><td><span class="method method-post">POST</span></td><td><code>/client/secure-document/store</code></td><td>Upload secure document</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                                <tr><td><span class="method method-post">POST</span></td><td><code>/client/secure-document/store-from-form</code></td><td>Create from form</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                                <tr><td><span class="method method-put">PUT</span></td><td><code>/client/secure-document/update/{id}</code></td><td>Update</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/client/secure-document/{id}</code></td><td>Get</td><td><span class="unit-badge unit-read">2</span></td></tr>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/client/secure-document/{id}/download</code></td><td>Download</td><td><span class="unit-badge unit-read">2</span></td></tr>
+                                <tr><td><span class="method method-delete">DELETE</span></td><td><code>/client/secure-document/delete/{id}</code></td><td>Delete</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                                <tr><td><span class="method method-post">POST</span></td><td><code>/client/secure-document/assign-user</code></td><td>Assign staff access</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h3>8.5 Client Budgets & NDIS</h3>
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr><th>Method</th><th>Endpoint</th><th>Description</th><th>Units</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td><span class="method method-post">POST</span></td><td><code>/client/budget/store</code></td><td>Create a client budget</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                                <tr><td><span class="method method-put">PUT</span></td><td><code>/client/budget/update/{id}</code></td><td>Update a budget</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                                <tr><td><span class="method method-delete">DELETE</span></td><td><code>/client/budget/delete/{id}</code></td><td>Delete a budget</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/client/budget/activity/{id}</code></td><td>Budget activity / spend history</td><td><span class="unit-badge unit-read">2</span></td></tr>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/client/budget/at-risk</code></td><td>Clients with at-risk budgets</td><td><span class="unit-badge unit-read">2</span></td></tr>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/client/budget/audit-trail/{budgetId}</code></td><td>Full budget audit trail</td><td><span class="unit-badge unit-read">2</span></td></tr>
+                                <tr><td><span class="method method-post">POST</span></td><td><code>/client/budget/rollover</code></td><td>Roll budget to new period</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                                <tr><td><span class="method method-delete">DELETE</span></td><td><code>/client/budget/rollover/{rolloverKey}</code></td><td>Delete rollover</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                                <tr><td><span class="method method-post">POST</span></td><td><code>/client/budget/temporary-funding</code></td><td>Add temporary funding</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                                <tr><td><span class="method method-put">PUT</span></td><td><code>/client/budget/temporary-funding/{groupId}</code></td><td>Update temporary funding</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                                <tr><td><span class="method method-delete">DELETE</span></td><td><code>/client/budget/temporary-funding/{groupId}</code></td><td>Remove temporary funding</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                                <tr><td><span class="method method-post">POST</span></td><td><code>/client/budget/sync-temp-funding/{id}</code></td><td>Sync temp funding to actual</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                                <tr><td><span class="method method-post">POST</span></td><td><code>/client/budget/{budgetId}/ndis-agreement/save</code></td><td>Save NDIS service agreement</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                                <tr><td><span class="method method-delete">DELETE</span></td><td><code>/client/budget/{budgetId}/ndis-agreement/{agreementId}</code></td><td>Delete agreement</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                                <tr><td><span class="method method-post">POST</span></td><td><code>/client/budget/{budgetId}/ndis-agreement/{agreementId}/send-for-signing</code></td><td>Send for e-signing</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/client/budget/{budgetId}/ndis-agreements</code></td><td>List NDIS agreements</td><td><span class="unit-badge unit-read">2</span></td></tr>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/client/budget/{budgetId}/ndis-agreements/summary</code></td><td>Agreements summary</td><td><span class="unit-badge unit-read">2</span></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h3>8.6 Client Billable Entries</h3>
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr><th>Method</th><th>Endpoint</th><th>Description</th><th>Units</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/client/billable-entry/all</code></td><td>All billable entries</td><td><span class="unit-badge unit-read">2</span></td></tr>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/client/billable-entry/pending</code></td><td>All pending entries</td><td><span class="unit-badge unit-read">2</span></td></tr>
+                                <tr><td><span class="method method-post">POST</span></td><td><code>/client/billable-entry/store</code></td><td>Create a billable entry</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                                <tr><td><span class="method method-put">PUT</span></td><td><code>/client/billable-entry/update/{id}</code></td><td>Update a billable entry</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                                <tr><td><span class="method method-delete">DELETE</span></td><td><code>/client/billable-entry/delete/{id}/{type}</code></td><td>Delete a billable entry</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                                <tr><td><span class="method method-put">PUT</span></td><td><code>/client/billable-entry/update-status/{id}/{type}</code></td><td>Update status (single)</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                                <tr><td><span class="method method-post">POST</span></td><td><code>/client/billable-entry/bulk-update-status</code></td><td><strong>Bulk update statuses — billed per entry</strong></td><td><span class="unit-badge unit-bulk">max(25,N)</span></td></tr>
+                                <tr><td><span class="method method-post">POST</span></td><td><code>/client/billable-entry/bulk-delete</code></td><td><strong>Bulk delete — billed per entry</strong></td><td><span class="unit-badge unit-bulk">max(25,N)</span></td></tr>
+                                <tr><td><span class="method method-post">POST</span></td><td><code>/client/billable-entry/convert-pending</code></td><td><strong>Convert pending to billable — billed per entry</strong></td><td><span class="unit-badge unit-bulk">max(25,N)</span></td></tr>
+                                <tr><td><span class="method method-post">POST</span></td><td><code>/billable-entry/task/store</code></td><td>Create billable from a task</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h2 id="web-roster">8.7 Roster / Scheduler</h2>
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr><th>Method</th><th>Endpoint</th><th>Description</th><th>Units</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/rosters</code></td><td>List roster shifts</td><td><span class="unit-badge unit-read">2</span></td></tr>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/rosters/getdata</code></td><td>Ajax data for roster calendar</td><td><span class="unit-badge unit-read">2</span></td></tr>
+                                <tr><td><span class="method method-post">POST</span></td><td><code>/roster/store</code></td><td>Create a shift</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                                <tr><td><span class="method method-put">PUT</span></td><td><code>/roster/update/{id}</code></td><td>Update a shift</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                                <tr><td><span class="method method-delete">DELETE</span></td><td><code>/roster/delete/{id}</code></td><td>Delete a shift</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                                <tr><td><span class="method method-delete">DELETE</span></td><td><code>/roster/delete/recurring/{id}</code></td><td><strong>Delete recurring series — billed per shift in series</strong></td><td><span class="unit-badge unit-bulk">max(25,N)</span></td></tr>
+                                <tr><td><span class="method method-put">PUT</span></td><td><code>/roster/update/recurring/{id}</code></td><td>Update recurring series</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                                <tr><td><span class="method method-put">PUT</span></td><td><code>/roster/update/move/{id}</code></td><td>Move / drag a shift</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                                <tr><td><span class="method method-put">PUT</span></td><td><code>/roster/cancel-shift/{id}</code></td><td>Cancel a shift</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                                <tr><td><span class="method method-post">POST</span></td><td><code>/roster/checkin</code></td><td>Manual clock in</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                                <tr><td><span class="method method-post">POST</span></td><td><code>/roster/checkout</code></td><td>Manual clock out</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                                <tr><td><span class="method method-post">POST</span></td><td><code>/roster/shift-note</code></td><td>Add shift note</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                                <tr><td><span class="method method-post">POST</span></td><td><code>/roster/publish</code></td><td><strong>Publish shifts — billed per shift published</strong></td><td><span class="unit-badge unit-bulk">max(25,N)</span></td></tr>
+                                <tr><td><span class="method method-post">POST</span></td><td><code>/roster/unpublish</code></td><td><strong>Unpublish shifts — billed per shift</strong></td><td><span class="unit-badge unit-bulk">max(25,N)</span></td></tr>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/roster/publish-history</code></td><td>History of publish actions</td><td><span class="unit-badge unit-read">2</span></td></tr>
+                                <tr><td><span class="method method-post">POST</span></td><td><code>/roster/sendroster</code></td><td><strong>Email roster to workers</strong></td><td><span class="unit-badge unit-premium">60</span></td></tr>
+                                <tr><td><span class="method method-post">POST</span></td><td><code>/roster/checkavailability</code></td><td>Check worker availability</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/roster/send-notification/{id}/{type}/{userid}</code></td><td>Notify one worker of shift</td><td><span class="unit-badge unit-read">2</span></td></tr>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/roster/send-multiple-notifications/{id}/{type}</code></td><td><strong>Notify all workers on shift — billed per worker</strong></td><td><span class="unit-badge unit-bulk">max(25,N)</span></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h3>8.8 Site Management (SIL / Group Home)</h3>
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr><th>Method</th><th>Endpoint</th><th>Description</th><th>Units</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/sites</code></td><td>List all sites</td><td><span class="unit-badge unit-read">2</span></td></tr>
+                                <tr><td><span class="method method-post">POST</span></td><td><code>/site/store</code></td><td>Create a site</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/site/{id}</code></td><td>Site overview</td><td><span class="unit-badge unit-read">2</span></td></tr>
+                                <tr><td><span class="method method-put">PUT</span></td><td><code>/site/basic-info/{id}</code></td><td>Update basic info</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                                <tr><td><span class="method method-put">PUT</span></td><td><code>/site/description/{id}</code></td><td>Update description</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                                <tr><td><span class="method method-put">PUT</span></td><td><code>/site/house-info/{id}</code></td><td>Update house info</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                                <tr><td><span class="method method-put">PUT</span></td><td><code>/site/site-details/{id}</code></td><td>Update site details</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                                <tr><td><span class="method method-delete">DELETE</span></td><td><code>/site/delete/{id}</code></td><td>Delete a site</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/site/{id}/overwatch</code></td><td><strong>AI shift caution overwatch</strong></td><td><span class="unit-badge unit-read">2</span></td></tr>
+                                <tr><td><span class="method method-post">POST</span></td><td><code>/site/roster/publish</code></td><td><strong>Publish site shifts — billed per shift</strong></td><td><span class="unit-badge unit-bulk">max(25,N)</span></td></tr>
+                                <tr><td><span class="method method-post">POST</span></td><td><code>/site/roster/unpublish</code></td><td><strong>Unpublish site shifts — billed per shift</strong></td><td><span class="unit-badge unit-bulk">max(25,N)</span></td></tr>
+                                <tr><td><span class="method method-delete">DELETE</span></td><td><code>/site/roster/delete/recurring/{id}</code></td><td><strong>Delete recurring series — billed per shift</strong></td><td><span class="unit-badge unit-bulk">max(25,N)</span></td></tr>
+                                <tr><td><span class="method method-post">POST</span></td><td><code>/site/roster/sendroster</code></td><td><strong>Email roster to site workers</strong></td><td><span class="unit-badge unit-premium">60</span></td></tr>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/site/roster/send-multiple-notifications/{id}/{type}</code></td><td><strong>Notify all site workers — billed per worker</strong></td><td><span class="unit-badge unit-bulk">max(25,N)</span></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h3>8.9 Timesheets</h3>
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr><th>Method</th><th>Endpoint</th><th>Description</th><th>Units</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/timesheets</code></td><td>List timesheets</td><td><span class="unit-badge unit-read">2</span></td></tr>
+                                <tr><td><span class="method method-post">POST</span></td><td><code>/timesheet/store</code></td><td>Create a timesheet</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/timesheet/{id}</code></td><td>Get timesheet details</td><td><span class="unit-badge unit-read">2</span></td></tr>
+                                <tr><td><span class="method method-delete">DELETE</span></td><td><code>/timesheet/delete/{id}</code></td><td>Delete a timesheet</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                                <tr><td><span class="method method-put">PUT</span></td><td><code>/timesheet/finalise/{id}</code></td><td>Finalise (lock) a timesheet</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                                <tr><td><span class="method method-put">PUT</span></td><td><code>/timesheet/unfinalise/{id}</code></td><td>Unfinalise</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/timesheet/export/{id}</code></td><td>Export to CSV/PDF</td><td><span class="unit-badge unit-heavy">35</span></td></tr>
+                                <tr><td><span class="method method-put">PUT</span></td><td><code>/timesheet/shift/include-shift/{id}</code></td><td>Include / exclude a shift</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                                <tr><td><span class="method method-put">PUT</span></td><td><code>/timesheet/shift/include-bulk</code></td><td><strong>Bulk include/exclude shifts — billed per shift</strong></td><td><span class="unit-badge unit-bulk">max(25,N)</span></td></tr>
+                                <tr><td><span class="method method-put">PUT</span></td><td><code>/timesheet/shift/lock/{id}</code></td><td>Lock a timesheet shift</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                                <tr><td><span class="method method-put">PUT</span></td><td><code>/timesheet/shift/unlock/{id}</code></td><td>Unlock a timesheet shift</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h2 id="web-finance">8.10–8.13 Finance</h2>
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr><th>Method</th><th>Endpoint</th><th>Description</th><th>Units</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/finance-invoicing/fetch/{type?}</code></td><td>List invoices</td><td><span class="unit-badge unit-read">2</span></td></tr>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/finance-invoicing/generated-invoices</code></td><td>Generated invoice data</td><td><span class="unit-badge unit-read">2</span></td></tr>
+                                <tr><td><span class="method method-post">POST</span></td><td><code>/finance-invoicing/bulk-generate</code></td><td><strong>Bulk generate invoices (heavy)</strong></td><td><span class="unit-badge unit-heavy">35</span></td></tr>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/finance-invoicing/bulk-drafts</code></td><td>List bulk invoice drafts</td><td><span class="unit-badge unit-read">2</span></td></tr>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/finance-invoicing/bulk-draft/{id}</code></td><td>Get bulk draft</td><td><span class="unit-badge unit-read">2</span></td></tr>
+                                <tr><td><span class="method method-post">POST</span></td><td><code>/finance-invoicing/bulk-draft/{id}/resync</code></td><td>Re-sync a bulk draft</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                                <tr><td><span class="method method-post">POST</span></td><td><code>/finance-invoicing/bulk-invoice-store</code></td><td>Store invoice from bulk draft</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                                <tr><td><span class="method method-post">POST</span></td><td><code>/invoices/email</code></td><td><strong>Email an invoice</strong></td><td><span class="unit-badge unit-premium">60</span></td></tr>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/invoices/{invoiceId}/download</code></td><td>Download invoice PDF</td><td><span class="unit-badge unit-read">2</span></td></tr>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/settings/xero/auth-url</code></td><td>Get Xero OAuth URL</td><td><span class="unit-badge unit-read">2</span></td></tr>
+                                <tr><td><span class="method method-post">POST</span></td><td><code>/settings/xero/complete-connection</code></td><td>Complete Xero OAuth flow</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/settings/xero/connection-status</code></td><td>Check Xero connection</td><td><span class="unit-badge unit-read">2</span></td></tr>
+                                <tr><td><span class="method method-post">POST</span></td><td><code>/settings/xero/disconnect</code></td><td>Disconnect Xero</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                                <tr><td><span class="method method-post">POST</span></td><td><code>/finances/xero/push-timesheet</code></td><td><strong>Push timesheet to Xero payroll</strong></td><td><span class="unit-badge unit-premium">60</span></td></tr>
+                                <tr><td><span class="method method-post">POST</span></td><td><code>/finances/xero/sync-invoices</code></td><td><strong>Sync invoices with Xero</strong></td><td><span class="unit-badge unit-premium">60</span></td></tr>
+                                <tr><td><span class="method method-post">POST</span></td><td><code>/finances/xero/execute-employee-sync</code></td><td><strong>Execute employee sync to Xero</strong></td><td><span class="unit-badge unit-premium">60</span></td></tr>
+                                <tr><td><span class="method method-post">POST</span></td><td><code>/finances/xero/pull-from-xero</code></td><td><strong>Pull data from Xero</strong></td><td><span class="unit-badge unit-premium">60</span></td></tr>
+                                <tr><td><span class="method method-post">POST</span></td><td><code>/settings/quickbooks/sync-invoices</code></td><td><strong>Sync invoices with QuickBooks</strong></td><td><span class="unit-badge unit-premium">60</span></td></tr>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/settings/quickbooks/connection-status</code></td><td>Check QB connection</td><td><span class="unit-badge unit-read">2</span></td></tr>
+                                <tr><td><span class="method method-post">POST</span></td><td><code>/settings/quickbooks/disconnect</code></td><td>Disconnect QuickBooks</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h3>8.13 NDIA Claims</h3>
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr><th>Method</th><th>Endpoint</th><th>Description</th><th>Units</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/claims/ndia-claims</code></td><td>List NDIA claims</td><td><span class="unit-badge unit-read">2</span></td></tr>
+                                <tr><td><span class="method method-post">POST</span></td><td><code>/claims/ndia-claims</code></td><td>Create a NDIA claim</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/claims/ndia-claims/{ref}</code></td><td>Get a specific claim</td><td><span class="unit-badge unit-read">2</span></td></tr>
+                                <tr><td><span class="method method-delete">DELETE</span></td><td><code>/claims/ndia-claims/{ref}</code></td><td>Delete a claim</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                                <tr><td><span class="method method-put">PUT</span></td><td><code>/claims/ndia-claims/{ref}/sync</code></td><td><strong>Sync claim with NDIA</strong></td><td><span class="unit-badge unit-premium">60</span></td></tr>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/claims/ndia-entries</code></td><td>Billable entries awaiting NDIA claiming</td><td><span class="unit-badge unit-heavy">35</span></td></tr>
+                                <tr><td><span class="method method-post">POST</span></td><td><code>/claims/ndia-entries/update-status</code></td><td><strong>Update NDIA entry statuses — billed per entry (heavy)</strong></td><td><span class="unit-badge unit-heavy">max(35,N)</span></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h2 id="web-reports">8.14 Reports</h2>
+                    <p>All report endpoints are classified as <strong>heavy (35 units, $0.2625/call)</strong>.</p>
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr><th>Method</th><th>Endpoint</th><th>Description</th><th>Units</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/reports/all-clients</code></td><td>Export all clients</td><td><span class="unit-badge unit-heavy">35</span></td></tr>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/reports/all-users</code></td><td>Export all staff</td><td><span class="unit-badge unit-heavy">35</span></td></tr>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/reports/all-incidents</code></td><td>All incidents</td><td><span class="unit-badge unit-heavy">35</span></td></tr>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/reports/all-incident-associated</code></td><td>Incidents with associated people</td><td><span class="unit-badge unit-heavy">35</span></td></tr>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/reports/all-client-careplans</code></td><td>Client care plans</td><td><span class="unit-badge unit-heavy">35</span></td></tr>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/reports/all-client-shiftcautions</code></td><td>AI shift cautions (clients)</td><td><span class="unit-badge unit-heavy">35</span></td></tr>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/reports/all-site-shiftcautions</code></td><td>AI shift cautions (sites)</td><td><span class="unit-badge unit-heavy">35</span></td></tr>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/reports/all-staff-documents</code></td><td>Staff compliance documents</td><td><span class="unit-badge unit-heavy">35</span></td></tr>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/reports/hcp-client-budgets</code></td><td>HCP client budgets</td><td><span class="unit-badge unit-heavy">35</span></td></tr>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/reports/ndis-client-budgets</code></td><td>NDIS client budgets</td><td><span class="unit-badge unit-heavy">35</span></td></tr>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/reports/service-hours-weekly</code></td><td>Weekly service hours</td><td><span class="unit-badge unit-heavy">35</span></td></tr>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/reports/client-weekly-sh-comparison</code></td><td>Client weekly service hours comparison</td><td><span class="unit-badge unit-heavy">35</span></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h2 id="web-ai">8.15 AI Features</h2>
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr><th>Method</th><th>Endpoint</th><th>Description</th><th>Units</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td><span class="method method-post">POST</span></td><td><code>/client-record/shiftnote/simplify</code></td><td>Simplify a shift note with AI</td><td><span class="unit-badge unit-premium">60</span></td></tr>
+                                <tr><td><span class="method method-post">POST</span></td><td><code>/client-record/ai-notes</code></td><td>Generate AI notes for a client</td><td><span class="unit-badge unit-premium">60</span></td></tr>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/vacant-shift/advanced-recommendations/{id}</code></td><td>AI worker recommendations for a vacant shift</td><td><span class="unit-badge unit-premium">60</span></td></tr>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/vacant-shift/recommendations</code></td><td>AI worker recommendations</td><td><span class="unit-badge unit-premium">60</span></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h3>8.16 Inbox / SMS</h3>
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr><th>Method</th><th>Endpoint</th><th>Description</th><th>Units</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/inbox/threads</code></td><td>List SMS conversation threads</td><td><span class="unit-badge unit-read">2</span></td></tr>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/inbox/messages</code></td><td>Messages in a thread</td><td><span class="unit-badge unit-read">2</span></td></tr>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/inbox/unread-count</code></td><td>Unread count</td><td><span class="unit-badge unit-read">2</span></td></tr>
+                                <tr><td><span class="method method-post">POST</span></td><td><code>/inbox/mark-read</code></td><td>Mark messages as read</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                                <tr><td><span class="method method-post">POST</span></td><td><code>/inbox/send</code></td><td><strong>Send an SMS via Textmagic</strong></td><td><span class="unit-badge unit-premium">60</span></td></tr>
+                                <tr><td><span class="method method-post">POST</span></td><td><code>/inbox/sync</code></td><td>Sync incoming messages</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h3>8.17 Settings</h3>
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr><th>Method</th><th>Endpoint</th><th>Description</th><th>Units</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/settings</code></td><td>Get all settings</td><td><span class="unit-badge unit-read">2</span></td></tr>
+                                <tr><td><span class="method method-put">PUT</span></td><td><code>/settings/business/update</code></td><td>Update business details</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                                <tr><td><span class="method method-put">PUT</span></td><td><code>/settings/timezone/update</code></td><td>Update timezone</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                                <tr><td><span class="method method-post">POST</span></td><td><code>/settings/import</code></td><td><strong>Bulk import — billed per cell (rows x 30 columns)</strong></td><td><span class="unit-badge unit-bulk">max(25, rowsx30)</span></td></tr>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/settings/shift-note-templates</code></td><td>List shift note templates</td><td><span class="unit-badge unit-read">2</span></td></tr>
+                                <tr><td><span class="method method-post">POST</span></td><td><code>/settings/shift-note-templates</code></td><td>Create template</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                                <tr><td><span class="method method-put">PUT</span></td><td><code>/settings/shift-note-templates/{id}</code></td><td>Update template</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                                <tr><td><span class="method method-delete">DELETE</span></td><td><code>/settings/shift-note-templates/{id}</code></td><td>Delete template</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h4>Import Billing Detail</h4>
+                    <pre><code>POST /settings/import
+ 5 rows  ->  5 x 30 = 150 cells  ->  150 units  =  $1.125
+10 rows  -> 10 x 30 = 300 cells  ->  300 units  =  $2.250
+50 rows  -> 50 x 30 = 1,500 cells -> 1,500 units = $11.25</code></pre>
+
+                    <h3>8.18 Vacant Shifts</h3>
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr><th>Method</th><th>Endpoint</th><th>Description</th><th>Units</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/vacant-shifts</code></td><td>List all vacant shifts</td><td><span class="unit-badge unit-read">2</span></td></tr>
+                                <tr><td><span class="method method-post">POST</span></td><td><code>/vacant-shift/assign</code></td><td>Assign a worker to a shift</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                                <tr><td><span class="method method-get">GET</span></td><td><code>/vacant-shift/advanced-recommendations/{id}</code></td><td><strong>AI worker recommendations</strong></td><td><span class="unit-badge unit-premium">60</span></td></tr>
+                                <tr><td><span class="method method-post">POST</span></td><td><code>/vacant-shift/get-staff-schedule/{staffId}</code></td><td>Worker schedule for conflict checking</td><td><span class="unit-badge unit-write">8</span></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- 9. Error Reference -->
+                <section class="section" id="errors">
+                    <div class="section-title">
+                        <div class="icon">9</div>
+                        Error Reference
+                    </div>
+                    <p class="section-desc">All 4xx and 5xx responses consume 0 units — you never pay for errors.</p>
+
+                    <h3>HTTP Status Codes</h3>
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr><th>Code</th><th>Meaning</th><th>Billed?</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td><span class="unit-badge unit-read">200</span></td><td>Success</td><td><strong>Yes</strong></td></tr>
+                                <tr><td><span class="unit-badge unit-read">201</span></td><td>Created</td><td><strong>Yes</strong></td></tr>
+                                <tr><td><span class="unit-badge unit-bulk">207</span></td><td>Multi-Status (bulk partial success)</td><td><strong>Yes</strong></td></tr>
+                                <tr><td><span class="unit-badge unit-free">400</span></td><td>Validation error</td><td><strong>No</strong></td></tr>
+                                <tr><td><span class="unit-badge unit-free">401</span></td><td>Authentication failed</td><td><strong>No</strong></td></tr>
+                                <tr><td><span class="unit-badge unit-free">403</span></td><td>Forbidden / insufficient permission</td><td><strong>No</strong></td></tr>
+                                <tr><td><span class="unit-badge unit-free">404</span></td><td>Record not found</td><td><strong>No</strong></td></tr>
+                                <tr><td><span class="unit-badge unit-free">422</span></td><td>Unprocessable (business rule violation)</td><td><strong>No</strong></td></tr>
+                                <tr><td><span class="unit-badge unit-free">429</span></td><td>Rate limit exceeded</td><td><strong>No</strong></td></tr>
+                                <tr><td><span class="unit-badge unit-free">500</span></td><td>Server error</td><td><strong>No</strong></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h3>Error Body Format</h3>
+                    <pre><code>{
+  "message": "The given data was invalid.",
+  "errors": {
+    "client_id": ["The client id field is required."],
+    "start": ["The start must be a valid date."]
+  }
+}</code></pre>
+
+                    <h3>Common Errors</h3>
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr><th>Scenario</th><th>Code</th><th>Message</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>Missing or invalid API key</td><td><span class="unit-badge unit-free">401</span></td><td><code>Unauthorized</code></td></tr>
+                                <tr><td>Key is revoked</td><td><span class="unit-badge unit-free">401</span></td><td><code>Invalid API key</code></td></tr>
+                                <tr><td>Rate limit exceeded</td><td><span class="unit-badge unit-free">429</span></td><td><code>Too Many Attempts.</code></td></tr>
+                                <tr><td>Validation failed</td><td><span class="unit-badge unit-free">400</span></td><td><code>The given data was invalid.</code></td></tr>
+                                <tr><td>Record not found</td><td><span class="unit-badge unit-free">404</span></td><td><code>Not found</code></td></tr>
+                                <tr><td>Wrong tenant / no access</td><td><span class="unit-badge unit-free">403</span></td><td><code>Forbidden</code></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- 10. Bulk Operations -->
+                <section class="section" id="bulk">
+                    <div class="section-title">
+                        <div class="icon">10</div>
+                        Bulk Operations Guide
+                    </div>
+                    <p class="section-desc">Optimise your API usage with intelligent batching strategies.</p>
+
+                    <h3>General Rules</h3>
+                    <ul style="margin:16px 0; padding-left:24px; color:var(--gray-600);">
+                        <li>All bulk endpoints accept up to <strong>500 items</strong> per call</li>
+                        <li>Billing is <code>max(min_units, item_count)</code> — you always pay at least the minimum</li>
+                        <li>HTTP <code>201</code> if all items succeed, <code>207 Multi-Status</code> if any fail</li>
+                        <li>Failed items return <code>errors</code> per index — you can retry only the failed items</li>
+                        <li>Errors on individual items do not roll back successful items</li>
+                    </ul>
+
+                    <h3>Bulk Response Format</h3>
+                    <pre><code>{
+  "created": 48,
+  "failed": 2,
+  "results": [
+    { "index": 0, "id": 101 },
+    { "index": 1, "id": 102 }
+  ],
+  "errors": [
+    {
+      "index": 2,
+      "item": { "client_id": 999 },
+      "errors": { "client_id": ["Client not found."] }
+    }
+  ]
+}</code></pre>
+
+                    <h3>Bulk Per-Item Endpoints Reference</h3>
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr><th>Endpoint</th><th>Item counted as</th><th>Min units</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td><code>POST /scheduler/publish</code></td><td>shifts published</td><td><span class="unit-badge unit-bulk">25</span></td></tr>
+                                <tr><td><code>POST /scheduler/unpublish</code></td><td>shifts unpublished</td><td><span class="unit-badge unit-bulk">25</span></td></tr>
+                                <tr><td><code>DELETE /roster/delete/recurring/{id}</code></td><td>shifts in series deleted</td><td><span class="unit-badge unit-bulk">25</span></td></tr>
+                                <tr><td><code>GET /roster/send-multiple-notifications/{id}/{type}</code></td><td>workers notified</td><td><span class="unit-badge unit-bulk">25</span></td></tr>
+                                <tr><td><code>POST /site/roster/publish</code></td><td>site shifts published</td><td><span class="unit-badge unit-bulk">25</span></td></tr>
+                                <tr><td><code>POST /site/roster/unpublish</code></td><td>site shifts unpublished</td><td><span class="unit-badge unit-bulk">25</span></td></tr>
+                                <tr><td><code>DELETE /site/roster/delete/recurring/{id}</code></td><td>shifts in series deleted</td><td><span class="unit-badge unit-bulk">25</span></td></tr>
+                                <tr><td><code>GET /site/roster/send-multiple-notifications/{id}/{type}</code></td><td>workers notified</td><td><span class="unit-badge unit-bulk">25</span></td></tr>
+                                <tr><td><code>PUT /timesheet/shift/include-bulk</code></td><td>shifts included</td><td><span class="unit-badge unit-bulk">25</span></td></tr>
+                                <tr><td><code>POST /client/billable-entry/bulk-update-status</code></td><td>entries updated</td><td><span class="unit-badge unit-bulk">25</span></td></tr>
+                                <tr><td><code>POST /client/billable-entry/bulk-delete</code></td><td>entries deleted</td><td><span class="unit-badge unit-bulk">25</span></td></tr>
+                                <tr><td><code>POST /client/billable-entry/convert-pending</code></td><td>entries converted</td><td><span class="unit-badge unit-bulk">25</span></td></tr>
+                                <tr><td><code>POST /claims/ndia-entries/update-status</code></td><td>NDIA entries updated (heavy)</td><td><span class="unit-badge unit-heavy">35</span></td></tr>
+                                <tr><td><code>POST /settings/import</code></td><td>rows x 30 columns</td><td><span class="unit-badge unit-bulk">25</span></td></tr>
+                                <tr><td><code>POST /clients/bulk-create</code></td><td>clients created</td><td><span class="unit-badge unit-bulk">25</span></td></tr>
+                                <tr><td><code>POST /invoices/bulk-create</code></td><td>invoices created</td><td><span class="unit-badge unit-bulk">25</span></td></tr>
+                                <tr><td><code>POST /billable-entries/bulk-create</code></td><td>entries created</td><td><span class="unit-badge unit-bulk">25</span></td></tr>
+                                <tr><td><code>POST /scheduler/bulk-create</code></td><td>shifts created</td><td><span class="unit-badge unit-bulk">25</span></td></tr>
+                                <tr><td><code>POST /scheduler/bulk-checkin</code></td><td>clock-ins processed</td><td><span class="unit-badge unit-bulk">25</span></td></tr>
+                                <tr><td><code>POST /scheduler/bulk-checkout</code></td><td>clock-outs processed</td><td><span class="unit-badge unit-bulk">25</span></td></tr>
+                                <tr><td><code>PUT /scheduler/bulk-update-status</code></td><td>shifts updated</td><td><span class="unit-badge unit-bulk">25</span></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h3>Cost-Optimisation Tips</h3>
+                    <div class="alert alert-success">
+                        <svg class="alert-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        <div>
+                            <ol style="margin:0; padding-left:20px;">
+                                <li><strong>Batch intelligently</strong> — one call with 50 items at 50 units is the same as two calls with 25 items each (2 x 25 = 50 units). Batching saves nothing on units but saves on latency and rate limit headroom.</li>
+                                <li><strong>The minimum floor matters for small batches</strong> — publishing 1 shift still costs 25 units. Accumulate small batches where possible.</li>
+                                <li><strong>Import is expensive per row</strong> — a 100-row import = 3,000 units ($22.50). Validate data client-side before importing.</li>
+                                <li><strong>Errors are free</strong> — if your code does a GET first to check existence and it returns 404, that's free. Only pay on success.</li>
+                                <li><strong>AI on checkout is unavoidable</strong> — every <code>appointment/checkout</code> triggers the AI pipeline (60 units) regardless of whether cautions are found.</li>
+                            </ol>
+                        </div>
+                    </div>
+                </section>
+
+                <div style="text-align:center; padding:40px 0; color:var(--gray-400); font-size:13px;">
+                    <p>Full endpoint list with 745 routes: see TRACKED_APIS.md</p>
+                    <p>Pricing source of truth: UnitCalculatorService.php in apimanagement.imploy.com.au/app/Services/</p>
+                    <p>Locked: 2026-06-23 — do not modify without updating both files.</p>
+                </div>
+
+            </main>
+        </div>
+    </div>
+
+    <button class="scroll-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Scroll to top">
+        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"/></svg>
+    </button>
+
+    <script>
+        // Active nav highlighting on scroll
+        const sections = document.querySelectorAll('section[id]');
+        const navLinks = document.querySelectorAll('.sidebar-nav a');
+
+        function onScroll() {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (scrollY >= sectionTop - 100) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === '#' + current) {
+                    link.classList.add('active');
+                }
+            });
+        }
+
+        window.addEventListener('scroll', onScroll);
+        onScroll();
+    </script>
+</body>
+</html>

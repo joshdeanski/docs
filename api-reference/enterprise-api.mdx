@@ -1,0 +1,90 @@
+---
+title: "Enterprise API"
+description: "Endpoint groups for enterprise integrations and automation clients."
+---
+
+**Base URL:** `https://app.imploy.com.au/api/enterprise/v1`  
+**Auth:** `X-API-Key: impl_live_...`
+
+## Clients
+
+| Method | Endpoint | Description | Units |
+| --- | --- | --- | --- |
+| GET | `/clients` | List clients | 2 |
+| GET | `/clients/{id}` | Get client | 2 |
+| GET | `/clients/{id}/budget` | Get client budget | 2 |
+| GET | `/clients/{id}/overview` | Get client overview | 2 |
+| POST | `/clients/bulk-create` | Bulk create clients (max 500) | max(25,N) |
+
+#### Bulk create clients payload
+
+```json
+{
+  "items": [
+    {
+      "first_name": "Jane",
+      "last_name": "Smith",
+      "client_type": "NDIS",
+      "language": "English",
+      "status": "Active",
+      "business_id": 1,
+      "date_of_birth": "1985-03-15",
+      "gender": "Female",
+      "address": "12 Example St, Sydney NSW 2000"
+    }
+  ]
+}
+```
+
+## Scheduler / Shifts
+
+| Method | Endpoint | Description | Units |
+| --- | --- | --- | --- |
+| GET | `/scheduler` | List shifts | 2 |
+| POST | `/scheduler` | Create shift | 8 |
+| PUT | `/scheduler/{id}` | Update shift | 8 |
+| DELETE | `/scheduler/{id}` | Delete shift | 8 |
+| POST | `/scheduler/bulk-create` | Bulk create shifts | max(25,N) |
+| PUT | `/scheduler/bulk-update-status` | Bulk update shift status | max(25,N) |
+| POST | `/scheduler/bulk-checkin` | Bulk clock in | max(25,N) |
+| POST | `/scheduler/bulk-checkout` | Bulk clock out | max(25,N) |
+
+### Mobile shift view
+
+| Method | Endpoint | Description | Units |
+| --- | --- | --- | --- |
+| GET | `/shifts?employee_id=3&status=upcoming` | Get shifts for worker | 2 |
+
+## Invoices
+
+| Method | Endpoint | Description | Units |
+| --- | --- | --- | --- |
+| GET | `/invoices` | List invoices | 2 |
+| POST | `/invoices/bulk-create` | Bulk create invoices | max(25,N) |
+
+### Billable entries
+
+| Method | Endpoint | Description | Units |
+| --- | --- | --- | --- |
+| POST | `/billable-entries/bulk-create` | Bulk create billable entries | max(25,N) |
+
+## Staff
+
+| Method | Endpoint | Description | Units |
+| --- | --- | --- | --- |
+| GET | `/staff` | List staff | 2 |
+| GET | `/staff/{id}` | Get staff member | 2 |
+
+### Timesheets
+
+| Method | Endpoint | Description | Units |
+| --- | --- | --- | --- |
+| GET | `/timesheets` | List timesheets | 2 |
+| PUT | `/timesheets/{id}` | Update timesheet shift | 8 |
+
+## NDIA Claims
+
+| Method | Endpoint | Description | Units |
+| --- | --- | --- | --- |
+| GET | `/ndia-claims` | List NDIA claims | 2 |
+| POST | `/ndia-claims` | Create NDIA claim | 8 |
